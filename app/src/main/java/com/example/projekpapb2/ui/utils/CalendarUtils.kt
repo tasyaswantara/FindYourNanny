@@ -1,5 +1,6 @@
 package com.example.projekpapb2.ui.utils
 
+import android.accounts.Account
 import android.content.Context
 import android.content.Intent
 import android.provider.CalendarContract
@@ -19,6 +20,8 @@ fun addEventToCalendar(
         putExtra(CalendarContract.Events.DESCRIPTION, description)
         putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, startMillis)
         putExtra(CalendarContract.EXTRA_EVENT_END_TIME, endMillis)
+
+        putExtra(CalendarContract.Events.ACCOUNT_TYPE, "com.google")
     }
     context.startActivity(intent)
 }
