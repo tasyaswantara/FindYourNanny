@@ -1,5 +1,6 @@
 package com.example.projekpapb2.ui.components
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -12,7 +13,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.example.projekpapb2.R
 import com.example.projekpapb2.data.model.Nanny
 
 @Composable
@@ -25,6 +29,15 @@ fun NannyItem(nanny: Nanny, onClick: () -> Unit) {
         elevation = CardDefaults.cardElevation(4.dp)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
+            Image(
+                painter = painterResource(id = R.drawable.photo_by_mathilde_langevin),
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(150.dp)
+            )
+            Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = nanny.name,
                 style = MaterialTheme.typography.titleMedium,
