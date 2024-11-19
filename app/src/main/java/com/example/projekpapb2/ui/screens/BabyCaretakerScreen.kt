@@ -2,8 +2,9 @@ package com.example.projekpapb2.ui.screens
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
@@ -19,14 +20,15 @@ import com.example.projekpapb2.navigation.NavRoutes
 import com.example.projekpapb2.ui.components.NannyItem
 
 @Composable
-fun NannyScreen(navController: NavController, repository: NannyRepository) {
+fun BabyCaretakerScreen(navController: NavController, repository: NannyRepository) {
     var nannies by remember { mutableStateOf(emptyList<Nanny>()) }
 
     LaunchedEffect(Unit) {
         nannies = repository.getNannies()
     }
 
-    LazyColumn(
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(2),
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp)

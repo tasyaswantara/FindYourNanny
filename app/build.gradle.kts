@@ -72,6 +72,7 @@ dependencies {
 
     implementation ("com.google.firebase:firebase-firestore:25.1.1")
     implementation ("com.google.firebase:firebase-auth:23.1.0")
+    implementation ("androidx.compose.foundation:foundation:1.5.0")
 
 
 }

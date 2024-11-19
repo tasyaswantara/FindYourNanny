@@ -5,9 +5,12 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.example.projekpapb2.ui.screens.NannyScreen
+import com.example.projekpapb2.ui.screens.BabyCaretakerScreen
 import com.example.projekpapb2.ui.screens.DetailScreen
 import com.example.projekpapb2.data.repository.NannyRepository
+import com.example.projekpapb2.ui.screens.AnimalCaretakerScreen
+import com.example.projekpapb2.ui.screens.ElderlyCaretakerScreen
+import com.example.projekpapb2.ui.screens.HouseCaretakerScreen
 
 object NavRoutes {
     const val NANNY_LIST = "nannyList"
@@ -24,7 +27,7 @@ fun NavGraph(navController: NavHostController) {
         startDestination = NavRoutes.NANNY_LIST
     ) {
         composable(NavRoutes.NANNY_LIST) {
-            NannyScreen(navController = navController, repository = repository)
+            BabyCaretakerScreen(navController = navController, repository = repository)
         }
 
         composable(
@@ -34,5 +37,27 @@ fun NavGraph(navController: NavHostController) {
             val nannyId = backStackEntry.arguments?.getString("nannyId").orEmpty()
             DetailScreen(navController = navController, nannyId = nannyId, repository = repository)
         }
+
+        composable("elderlyCaretakerList") {
+            ElderlyCaretakerScreen(
+                navController = navController,
+                repository = NannyRepository()
+            )
+        }
+        composable("animalCaretakerList") {
+            AnimalCaretakerScreen(
+                navController = navController,
+                repository = NannyRepository()
+            )
+        }
+        composable("houseCaretakerList") {
+            HouseCaretakerScreen(
+                navController = navController,
+                repository = NannyRepository()
+            )
+        }
+
+
+
     }
 }
