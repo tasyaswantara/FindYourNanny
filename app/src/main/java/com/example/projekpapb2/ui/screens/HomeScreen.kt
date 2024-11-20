@@ -3,6 +3,9 @@ package com.example.projekpapb2.ui.screens
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -27,7 +30,12 @@ fun HomeScreen(navController: NavController, repository: NannyRepository) {
         nannies = repository.getNannies()
     }
 
-    LazyColumn(modifier = Modifier.fillMaxSize().padding(16.dp)) {
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(2),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ){
         items(nannies) { nanny ->
             NannyItem(nanny = nanny, onClick = {
                 navController.navigate("detail/${nanny.id}")
