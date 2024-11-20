@@ -15,10 +15,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.projekpapb2.R
 import com.example.projekpapb2.ui.theme.*
 
+@Preview
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreen() {
@@ -58,7 +60,7 @@ fun ProfileScreen() {
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Image(
-                    painter = painterResource(id = R.drawable.ic_profilenavbar),
+                    painter = painterResource(id = R.drawable.ic_profile),
                     contentDescription = "Profile Picture",
                     modifier = Modifier
                         .size(80.dp)
