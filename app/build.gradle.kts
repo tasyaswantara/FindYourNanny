@@ -69,10 +69,15 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+    implementation ("androidx.compose.ui:ui:1.7.5")
+    implementation ("androidx.compose.material:material:1.7.5")
+    implementation ("androidx.compose.ui:ui-tooling-preview:1.7.5")
+    implementation ("androidx.navigation:navigation-compose:2.8.4")
+    implementation ("androidx.lifecycle:lifecycle-runtime-compose:2.8.7")
 
     implementation ("com.google.firebase:firebase-firestore:25.1.1")
     implementation ("com.google.firebase:firebase-auth:23.1.0")
-    implementation ("androidx.compose.foundation:foundation:1.5.0")
+
 
 
 }

@@ -7,6 +7,6 @@ data class Nanny(
     val experience: Int = 0,
     val age: Int = 0,
     val gender: String = "",
-    val phoneNumber: String = "",
-    val photo: Int = R.drawable.photo_by_mathilde_langevin
+    val phoneNumber: String = ""
+
 )
