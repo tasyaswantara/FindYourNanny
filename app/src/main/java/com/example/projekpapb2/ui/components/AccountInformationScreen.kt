@@ -192,6 +192,18 @@ fun AccountInformationScreen() {
                         unfocusedLabelColor = Blue200
                     )
                 )
+
+                Spacer(modifier = Modifier.height(200.dp))
+
+                NannyButton(
+                    text = "Ubah",
+                    onClick = { /* Simpan data */ },
+                    containerColor = Blue500,
+                    contentColor = Color.White,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 16.dp)
+                )
             }
         }
     )
