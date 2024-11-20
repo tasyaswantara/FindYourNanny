@@ -1,6 +1,7 @@
 package com.example.projekpapb2.ui.screens
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -36,21 +37,30 @@ fun HomeScreen(navController: NavController, repository: NannyRepository) {
         nannies = repository.getNannies()
     }
 
-    LazyVerticalGrid(
-        columns = GridCells.Fixed(2),
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),  // Memberikan padding antar item
-        contentPadding = PaddingValues(8.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp), // Jarak horizontal antar kolom
-        verticalArrangement = Arrangement.spacedBy(8.dp)
-    ){
-        items(nannies) { nanny ->
-            NannyItem(nanny = nanny, onClick = {
-                navController.navigate("detail/${nanny.id}")
-            })
-
+    Column(
+        modifier = Modifier.fillMaxSize()
+    ) {
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(2),
+            modifier = Modifier
+                .weight(1f)
+                .padding(16.dp),
+            contentPadding = PaddingValues(8.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            items(nannies) { nanny ->
+                NannyItem(nanny = nanny, onClick = {
+                    navController.navigate("detail/${nanny.id}")
+                })
+            }
         }
-    }
 
+        BottomNavbar(
+            selectedScreen = "Beranda",
+            onItemSelected = { selected ->
+                println("Selected screen: $selected")
+            }
+        )
+    }
 }
