@@ -7,9 +7,9 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -21,25 +21,26 @@ import com.example.projekpapb2.ui.components.NannyItem
 
 @Composable
 fun ElderlyCaretakerScreen(navController: NavController, repository: NannyRepository) {
-    var caretakers by remember { mutableStateOf(emptyList<Nanny>()) }
-
+    var nannies by remember { mutableStateOf(emptyList<Nanny>()) }
     LaunchedEffect(Unit) {
-        caretakers = repository.getNannies()
+        nannies = repository.getNannies()
     }
 
-    LazyVerticalGrid(
-        columns = GridCells.Fixed(2),
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(8.dp)
-    ) {
-        items(caretakers) { caretaker ->
-            NannyItem(
-                nanny = caretaker,
-                onClick = {
-                    navController.navigate(NavRoutes.detailRoute(caretaker.id))
-                }
-            )
+    if (nannies.isNotEmpty()) {
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(2),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp)
+        ) {
+            items(nannies) { nanny ->
+                NannyItem(
+                    nanny = nanny,
+                    onClick = {
+                        navController.navigate(NavRoutes.detailRoute(nanny.id))
+                    }
+                )
+            }
         }
     }
 }
