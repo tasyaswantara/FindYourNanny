@@ -1,4 +1,4 @@
-package com.example.projekpapb2.ui.components
+package com.example.projekpapb2.ui.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
@@ -40,6 +40,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.projekpapb2.R
+import com.example.projekpapb2.ui.components.NannyButton
 import com.example.projekpapb2.ui.theme.Blue200
 import com.example.projekpapb2.ui.theme.Blue400
 import com.example.projekpapb2.ui.theme.Blue500
