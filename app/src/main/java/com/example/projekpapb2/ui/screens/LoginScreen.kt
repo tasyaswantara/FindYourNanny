@@ -1,12 +1,12 @@
 package com.example.projekpapb2.ui.screens
 
-import android.app.Instrumentation
 import android.content.Intent
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -21,7 +21,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -32,10 +31,7 @@ import androidx.navigation.NavController
 import com.example.projekpapb2.R
 import com.example.projekpapb2.data.repository.AuthRepository
 import com.example.projekpapb2.ui.theme.Fredoka
-import com.google.firebase.auth.FirebaseAuth
 import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.Firebase
@@ -54,19 +50,24 @@ fun LoginScreen(navController: NavController, authRepository: AuthRepository) {
     var emailError by remember { mutableStateOf(false) }
     var passwordError by remember { mutableStateOf(false) }
     var passwordVisible by remember { mutableStateOf(false) }
-    val firebaseAuth = FirebaseAuth.getInstance()
 
     var user by remember { mutableStateOf(Firebase.auth.currentUser) }
 
     val launcher = authLauncher(
-        onAuthComplete = {result ->
-            user =result.user
+        onAuthComplete = { result ->
+            user = result.user
+            if (user != null) {
+                navController.navigate("home") {
+                    popUpTo("login") { inclusive = true } // Mencegah kembali ke layar login
+                }
+            }
         },
         onAuthError = {
             user = null
+            errorMessage = "Login dengan Google gagal. Coba lagi."
         }
     )
-//    val token = stringResource(R.string.web_id)
+    val token = stringResource(R.string.web_id)
     val context = LocalContext.current
 
 
@@ -213,39 +214,40 @@ fun LoginScreen(navController: NavController, authRepository: AuthRepository) {
         }
 
         Spacer(modifier = Modifier.height(16.dp))
-        // Atau Divider
+
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Divider(modifier = Modifier.weight(1f), color = Color.Gray)
+            HorizontalDivider(modifier = Modifier.weight(1f), color = Color.Gray)
             Text(
                 text = "atau",
                 modifier = Modifier.padding(horizontal = 8.dp),
                 style = MaterialTheme.typography.bodySmall.copy(
-                    color = Color.Gray,fontFamily = Fredoka
+                    color = Color.Gray, fontFamily = Fredoka
                 )
             )
-            Divider(modifier = Modifier.weight(1f), color = Color.Gray)
+            HorizontalDivider(modifier = Modifier.weight(1f), color = Color.Gray)
         }
 
         Spacer(modifier = Modifier.height(16.dp))
-        // Tombol Masuk dengan Google
+
         Button(
             onClick = {
-//                val gso =
-//                    GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-//                        .requestIdToken(token)
-//                        .requestEmail()
-//                        .build()
-//                val gsc = GoogleSignIn.getClient(context, gso)
-//                launcher.launch(gsc.signInIntent)
-
+                val gso =
+                    GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                        .requestIdToken(token)
+                        .requestEmail()
+                        .build()
+                val gsc = GoogleSignIn.getClient(context, gso)
+                launcher.launch(gsc.signInIntent)
             },
             modifier = Modifier
                 .fillMaxWidth()
-                .height(48.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = Color.White)
+                .height(48.dp)
+                .border(1.dp, Color(0xFF6667FF), RoundedCornerShape(16.dp)),
+            colors = ButtonDefaults.buttonColors(containerColor = Color.White),
+            shape = RoundedCornerShape(16.dp)
         ) {
             Image(
                 painter = painterResource(id = R.drawable.icon_google),
@@ -253,8 +255,15 @@ fun LoginScreen(navController: NavController, authRepository: AuthRepository) {
                 modifier = Modifier.size(20.dp)
             )
             Spacer(modifier = Modifier.width(8.dp))
-            Text(text = "Masuk dengan Google", color = Color.Black,fontFamily = Fredoka)
+            Text(
+                text = "Masuk dengan Google",
+                color = Color.Black,
+                fontFamily = Fredoka,
+                fontSize = 14.sp, // Sesuaikan ukuran font jika perlu
+                fontWeight = FontWeight.W500
+            )
         }
+
 
         Spacer(modifier = Modifier.height(24.dp))
         // Daftar
