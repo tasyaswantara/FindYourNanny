@@ -14,6 +14,7 @@ import com.example.projekpapb2.ui.screens.BookingScreen
 import com.example.projekpapb2.ui.screens.DetailScreen
 import com.example.projekpapb2.ui.screens.HomeScreen
 import com.example.projekpapb2.ui.screens.LoginScreen
+import com.example.projekpapb2.ui.screens.ProfileScreen
 import com.example.projekpapb2.ui.screens.RegisterScreen
 import com.google.firebase.FirebaseApp
 
@@ -55,6 +56,9 @@ fun FindYourNannyApp() {
         }
         composable("booking/{nannyId}") { backStackEntry ->
             BookingScreen(navController = navController)
+        }
+        composable("profil") {
+            ProfileScreen(navController = navController)
         }
     }
 }

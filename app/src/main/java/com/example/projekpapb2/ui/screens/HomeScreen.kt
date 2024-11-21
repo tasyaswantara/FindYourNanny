@@ -57,6 +57,7 @@ fun HomeScreen(navController: NavController, repository: NannyRepository) {
         }
 
         BottomNavbar(
+            navController = navController,
             selectedScreen = "Beranda",
             onItemSelected = { selected ->
                 println("Selected screen: $selected")

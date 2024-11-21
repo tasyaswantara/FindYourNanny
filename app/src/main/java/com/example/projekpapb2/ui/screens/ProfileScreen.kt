@@ -6,24 +6,21 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.example.projekpapb2.R
+import com.example.projekpapb2.ui.components.BottomNavbar
 import com.example.projekpapb2.ui.theme.*
 
-@Preview
-@OptIn(ExperimentalMaterial3Api::class)
+
 @Composable
-fun ProfileScreen() {
+fun ProfileScreen(navController: NavController) {
     Scaffold(
         topBar = {
             Card(
@@ -45,7 +42,13 @@ fun ProfileScreen() {
                 }
             }
         },
-        bottomBar = { BottomNavigationBar() }
+        bottomBar = { BottomNavbar(
+            navController = navController,
+            selectedScreen = "Profil",
+            onItemSelected = { selected ->
+                println("Selected screen: $selected")
+            }
+        ) }
     ) { contentPadding ->
         Column(
             modifier = Modifier
@@ -117,61 +120,3 @@ fun ProfileMenuItem(icon: Int, title: String) {
     }
 }
 
-@Composable
-fun BottomNavigationBar() {
-    val selectedIndex = remember { mutableStateOf(0) }
-
-    NavigationBar(
-        containerColor = Blue100,
-        tonalElevation = 4.dp
-    ) {
-        NavigationBarItem(
-            icon = {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_home),
-                    contentDescription = "Beranda"
-                )
-            },
-            label = { Text("Beranda", style = TextStyle(fontFamily = Fredoka, fontSize = MaterialTheme.typography.bodyMedium.fontSize)) },
-            selected = selectedIndex.value == 0,
-            onClick = { selectedIndex.value = 0 },
-            colors = NavigationBarItemDefaults.colors(
-                indicatorColor = Blue300,
-                selectedIconColor = Color.Black,
-                selectedTextColor = Color.Black
-            )
-        )
-        NavigationBarItem(
-            icon = {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_history),
-                    contentDescription = "Riwayat"
-                )
-            },
-            label = { Text("Riwayat", style = TextStyle(fontFamily = Fredoka, fontSize = MaterialTheme.typography.bodyMedium.fontSize)) },
-            selected = selectedIndex.value == 1,
-            onClick = { selectedIndex.value = 1 },
-            colors = NavigationBarItemDefaults.colors(
-                indicatorColor = Blue300,
-                selectedIconColor = Color.Black,
-                selectedTextColor = Color.Black
-            )
-        )
-        NavigationBarItem(
-            icon = {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_profilenavbar),
-                    contentDescription = "Profil"
-                )
-            },
-            label = { Text("Profil", style = TextStyle(fontFamily = Fredoka, fontSize = MaterialTheme.typography.bodyMedium.fontSize)) },
-            selected = selectedIndex.value == 2,
-            onClick = { selectedIndex.value = 2 },
-            colors = NavigationBarItemDefaults.colors(
-                indicatorColor = Blue300,
-                selectedIconColor = Color.Black,
-                selectedTextColor = Color.Black
-            )
-        )
-    }
-}
