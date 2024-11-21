@@ -1,6 +1,7 @@
 package com.example.projekpapb2.ui.screens
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -86,18 +87,23 @@ fun ProfileScreen(navController: NavController) {
             }
 
             Spacer(modifier = Modifier.height(24.dp))
-            ProfileMenuItem(icon = R.drawable.ic_account, title = "Informasi Akun")
-            ProfileMenuItem(icon = R.drawable.ic_notification, title = "Notifikasi")
-            ProfileMenuItem(icon = R.drawable.ic_logout, title = "Keluar Akun")
+            ProfileMenuItem(icon = R.drawable.ic_account, title = "Informasi Akun", "accountinfo", navController = navController)
+            ProfileMenuItem(icon = R.drawable.ic_notification, title = "Notifikasi",null, navController = navController)
+            ProfileMenuItem(icon = R.drawable.ic_logout, title = "Keluar Akun",null, navController = navController)
         }
     }
 }
 
 @Composable
-fun ProfileMenuItem(icon: Int, title: String) {
+fun ProfileMenuItem(icon: Int, title: String, navigate: String?, navController: NavController) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
+            .clickable {
+                navigate?.let {
+                    navController.navigate(it)
+                }
+            }
             .padding(vertical = 12.dp)
     ) {
         Icon(
@@ -119,4 +125,3 @@ fun ProfileMenuItem(icon: Int, title: String) {
         )
     }
 }
-

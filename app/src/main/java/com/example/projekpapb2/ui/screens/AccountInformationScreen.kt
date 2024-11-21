@@ -39,6 +39,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.projekpapb2.R
 import com.example.projekpapb2.ui.components.NannyButton
 import com.example.projekpapb2.ui.theme.Blue200
@@ -47,10 +48,10 @@ import com.example.projekpapb2.ui.theme.Blue500
 import com.example.projekpapb2.ui.theme.Blue600
 import com.example.projekpapb2.ui.theme.Fredoka
 
-@Preview
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AccountInformationScreen() {
+fun AccountInformationScreen(navController: NavController) {
     var text by remember { mutableStateOf("Keenan Tee") }
 
     Scaffold(
@@ -65,7 +66,7 @@ fun AccountInformationScreen() {
                 Box(modifier = Modifier.fillMaxSize()) {
                     IconButton(
                         onClick = {
-                            // Aksi tombol kembali
+                            navController.popBackStack()
                         },
                         modifier = Modifier
                             .align(Alignment.CenterStart)

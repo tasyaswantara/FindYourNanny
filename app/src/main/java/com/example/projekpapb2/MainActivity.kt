@@ -10,6 +10,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.projekpapb2.data.repository.AuthRepository
 import com.example.projekpapb2.data.repository.NannyRepository
+import com.example.projekpapb2.ui.screens.AccountInformationScreen
 import com.example.projekpapb2.ui.screens.BookingScreen
 import com.example.projekpapb2.ui.screens.DetailScreen
 import com.example.projekpapb2.ui.screens.HomeScreen
@@ -39,7 +40,7 @@ fun FindYourNannyApp() {
 
     NavHost(
         navController = navController,
-        startDestination = "login"
+        startDestination = "home"
     ) {
         composable("login") {
             LoginScreen(navController = navController, authRepository = authRepository)
@@ -59,6 +60,9 @@ fun FindYourNannyApp() {
         }
         composable("profil") {
             ProfileScreen(navController = navController)
+        }
+        composable("accountinfo") {
+            AccountInformationScreen(navController = navController)
         }
     }
 }
