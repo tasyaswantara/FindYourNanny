@@ -40,7 +40,7 @@ fun FindYourNannyApp() {
 
     NavHost(
         navController = navController,
-        startDestination = "login"
+        startDestination = "home"
     ) {
         composable("login") {
             LoginScreen(navController = navController, authRepository = authRepository)
