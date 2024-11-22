@@ -77,6 +77,13 @@ dependencies {
 
     implementation ("com.google.firebase:firebase-firestore:25.1.1")
     implementation ("com.google.firebase:firebase-auth:23.1.0")
+    implementation ("com.google.android.gms:play-services-auth:20.3.0")
+
+    //image loader
+    implementation ("io.coil-kt:coil-compose:2.4.0")
+
+    //icons
+    implementation ("androidx.compose.material:material-icons-extended:1.6.0")
 
 
 
