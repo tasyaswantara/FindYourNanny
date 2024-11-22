@@ -12,7 +12,9 @@ import com.example.projekpapb2.data.repository.AuthRepository
 import com.example.projekpapb2.data.repository.NannyRepository
 import com.example.projekpapb2.ui.screens.BookingScreen
 import com.example.projekpapb2.ui.screens.DetailScreen
+import com.example.projekpapb2.ui.screens.HistoryScreen
 import com.example.projekpapb2.ui.screens.HomeScreen
+import com.example.projekpapb2.ui.screens.HouseCaretakerScreen
 import com.example.projekpapb2.ui.screens.LoginScreen
 import com.example.projekpapb2.ui.screens.RegisterScreen
 import com.google.firebase.FirebaseApp
