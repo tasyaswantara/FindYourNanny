@@ -16,7 +16,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.projekpapb2.R
+import coil.compose.rememberAsyncImagePainter
 import com.example.projekpapb2.data.model.Nanny
 
 @Composable
@@ -31,14 +31,15 @@ fun NannyItem(nanny: Nanny, onClick: () -> Unit) {
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             // Gambar
+
+
             Image(
-                painter = painterResource(id = R.drawable.photo_by_mathilde_langevin),
-                contentDescription = null,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(150.dp)
+                painter = rememberAsyncImagePainter("https://images.unsplash.com/photo-1628373383885-4be0bc0172fa?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1301&q=80"),
+                contentDescription = "Nanny Image",
+                modifier = Modifier.fillMaxWidth().height(150.dp),
+                contentScale = ContentScale.Crop
             )
+
             Spacer(modifier = Modifier.height(8.dp))
 
             // Nama Nanny dengan font Fredoka Medium 14
