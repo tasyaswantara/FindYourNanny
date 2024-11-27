@@ -9,62 +9,94 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.White
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import com.example.projekpapb2.ui.components.BottomNavbar
+import com.example.projekpapb2.ui.theme.Blue600
+import com.example.projekpapb2.ui.theme.Fredoka
 
 @Composable
-fun HistoryScreen() {
+fun HistoryScreen(navController: NavController) {
     var selectedTab by remember { mutableStateOf("Berlangsung") }
 
-    Spacer(modifier = Modifier.height(19.dp)) // Jarak antara TopAppBar dan tombol
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(White)
-    ) {
-
-
-        Spacer(modifier = Modifier.height(14.dp)) // Jarak antara TopAppBar dan tombol
-
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
-            horizontalArrangement = Arrangement.SpaceEvenly
-        ) {
-            OutlinedButton(
-                onClick = { selectedTab = "Berlangsung" },
-                colors = ButtonDefaults.outlinedButtonColors(
-                    containerColor = if (selectedTab == "Berlangsung") Color(0xFFECECEC) else Color.Transparent,
-                    contentColor = if (selectedTab == "Berlangsung") Color(0xFF7C83FD) else Color(0xFF7C83FD)
-                ),
-                shape = RoundedCornerShape(50),
-                modifier = Modifier.padding(horizontal = 4.dp)
+    Scaffold(
+        topBar = {
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(100.dp),
+                shape = RoundedCornerShape(bottomStart = 30.dp, bottomEnd = 30.dp),
+                colors = CardDefaults.cardColors(containerColor = Blue600)
             ) {
-                Text("Berlangsung")
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = "Riwayat",
+                        color = Color.White,
+                        style = MaterialTheme.typography.titleLarge.copy(fontFamily = Fredoka)
+                    )
+                }
             }
-
-            OutlinedButton(
-                onClick = { selectedTab = "Selesai" },
-                colors = ButtonDefaults.outlinedButtonColors(
-                    containerColor = if (selectedTab == "Selesai") Color(0xFFECECEC) else Color.Transparent,
-                    contentColor = if (selectedTab == "Selesai") Color(0xFF7C83FD) else Color(0xFF7C83FD)
-                ),
-                shape = RoundedCornerShape(50),
-                modifier = Modifier.padding(horizontal = 4.dp)
-            ) {
-                Text("Selesai")
-            }
+        },
+        bottomBar = {
+            BottomNavbar(
+                navController = navController,
+                selectedScreen = "Riwayat",
+                onItemSelected = { selected ->
+                    println("Selected screen: $selected")
+                }
+            )
         }
+    ) { contentPadding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(contentPadding)
+                .padding(horizontal = 16.dp)
+        ) {
+            Spacer(modifier = Modifier.height(24.dp))
 
-        Spacer(modifier = Modifier.height(11.dp)) // Jarak antara tombol dan konten
+            // Tab Selector
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+                OutlinedButton(
+                    onClick = { selectedTab = "Berlangsung" },
+                    colors = ButtonDefaults.outlinedButtonColors(
+                        containerColor = if (selectedTab == "Berlangsung") Color(0xFFECECEC) else Color.Transparent,
+                        contentColor = Color(0xFF7C83FD)
+                    ),
+                    shape = RoundedCornerShape(50)
+                ) {
+                    Text("Berlangsung")
+                }
 
-        if (selectedTab == "Berlangsung") {
-            OngoingServices()
-        } else {
-            CompletedServices()
+                OutlinedButton(
+                    onClick = { selectedTab = "Selesai" },
+                    colors = ButtonDefaults.outlinedButtonColors(
+                        containerColor = if (selectedTab == "Selesai") Color(0xFFECECEC) else Color.Transparent,
+                        contentColor = Color(0xFF7C83FD)
+                    ),
+                    shape = RoundedCornerShape(50)
+                ) {
+                    Text("Selesai")
+                }
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Content Based on Tab
+            if (selectedTab == "Berlangsung") {
+                OngoingServices()
+            } else {
+                CompletedServices()
+            }
         }
     }
 }

@@ -59,7 +59,10 @@ fun BottomNavbar(
 
         BottomNavigationItem(
             selected = selectedScreen == "Riwayat",
-            onClick = { onItemSelected("Riwayat") },
+            onClick = {
+                onItemSelected("Riwayat");
+                navController.navigate("history")
+            },
             icon = {
                 Icon(
                     painter = painterResource(
