@@ -62,6 +62,7 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.androidx.navigation.runtime.ktx)
     implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.espresso.core)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -77,14 +78,15 @@ dependencies {
 
     implementation ("com.google.firebase:firebase-firestore:25.1.1")
     implementation ("com.google.firebase:firebase-auth:23.1.0")
-    implementation ("com.google.android.gms:play-services-auth:20.3.0")
+    implementation (libs.play.services.auth)
 
     //image loader
     implementation ("io.coil-kt:coil-compose:2.4.0")
 
     //icons
-    implementation ("androidx.compose.material:material-icons-extended:1.6.0")
-
+    implementation (libs.androidx.material.icons.extended)
+    //splash
+    implementation (libs.androidx.core.splashscreen)
 
 
 }
