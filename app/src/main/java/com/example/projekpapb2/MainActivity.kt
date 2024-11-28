@@ -21,6 +21,9 @@ import com.example.projekpapb2.ui.screens.ProfileScreen
 import com.example.projekpapb2.ui.screens.RegisterScreen
 import com.google.firebase.FirebaseApp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import com.example.projekpapb2.ui.screens.AnimalCaretakerScreen
+import com.example.projekpapb2.ui.screens.BabyCaretakerScreen
+import com.example.projekpapb2.ui.screens.ElderlyCaretakerScreen
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -64,6 +67,18 @@ fun FindYourNannyApp() {
         }
         composable("home") {
             HomeScreen(navController = navController, repository = nannyRepository)
+        }
+        composable("elderlyList") {
+            ElderlyCaretakerScreen(navController = navController, repository = nannyRepository)
+        }
+        composable("animalList") {
+            AnimalCaretakerScreen(navController = navController, repository = nannyRepository)
+        }
+        composable("homeList") {
+            HouseCaretakerScreen(navController = navController, repository = nannyRepository)
+        }
+        composable("babyList") {
+            BabyCaretakerScreen(navController = navController, repository = nannyRepository)
         }
         composable("detail/{nannyId}") { backStackEntry ->
             val nannyId = backStackEntry.arguments?.getString("nannyId") ?: ""
