@@ -4,7 +4,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -20,14 +19,11 @@ import com.example.projekpapb2.ui.screens.LoginScreen
 import com.example.projekpapb2.ui.screens.ProfileScreen
 import com.example.projekpapb2.ui.screens.RegisterScreen
 import com.google.firebase.FirebaseApp
-import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.example.projekpapb2.ui.screens.AnimalCaretakerScreen
 import com.example.projekpapb2.ui.screens.BabyCaretakerScreen
 import com.example.projekpapb2.ui.screens.ElderlyCaretakerScreen
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import com.example.projekpapb2.ui.screens.OnBoardingInterface
+import com.example.projekpapb2.ui.screens.OnBoardingPage
 
 
 class MainActivity : ComponentActivity() {
@@ -36,13 +32,7 @@ class MainActivity : ComponentActivity() {
 
         // Initialize Firebase
         FirebaseApp.initializeApp(this)
-        val splashScreen =  installSplashScreen()
-        splashScreen.setKeepOnScreenCondition{true}
 
-        CoroutineScope(Dispatchers.Main).launch {
-            delay(3000L)
-            splashScreen.setKeepOnScreenCondition{false}
-        }
         setContent {
             FindYourNannyApp()
         }
@@ -57,13 +47,19 @@ fun FindYourNannyApp() {
 
     NavHost(
         navController = navController,
-        startDestination = "login"
+        startDestination = "onboarding"
     ) {
         composable("login") {
             LoginScreen(navController = navController, authRepository = authRepository)
         }
         composable("register") {
             RegisterScreen(navController = navController, authRepository = authRepository)
+        }
+
+        composable("onboarding") {
+            OnBoardingPage(navController = navController, page = OnBoardingInterface(title = "Selamat datang di Find Your Nanny!",
+                description = "Aplikasi Find Your Nanny memudahkan Anda menemukan tenaga bantuan rumah tangga yang berpengalaman dan terpercaya.",
+                image = R.drawable.intro_satu))
         }
         composable("home") {
             HomeScreen(navController = navController, repository = nannyRepository)

@@ -48,28 +48,28 @@ import com.example.projekpapb2.ui.components.NannyItem
 import com.example.projekpapb2.ui.theme.Blue600
 import com.example.projekpapb2.ui.theme.ProjekPAPB2Theme
 
-@Composable
-fun HomeScreen(navController: NavController, repository: NannyRepository) {
-    val context = LocalContext.current
-    var nannies by remember { mutableStateOf(listOf<Nanny>()) }
-
-    LaunchedEffect(Unit) {
-        nannies = repository.getNannies()
-    }
-
-    LazyColumn(modifier = Modifier.fillMaxSize().padding(16.dp)) {
-        items(nannies) { nanny ->
-            NannyItem(nanny = nanny, onClick = {
-                navController.navigate("detail/${nanny.id}")
-            })
-        }
-    }
-}
+//@Composable
+//fun HomeScreen(navController: NavController, repository: NannyRepository) {
+//    val context = LocalContext.current
+//    var nannies by remember { mutableStateOf(listOf<Nanny>()) }
+//
+//    LaunchedEffect(Unit) {
+//        nannies = repository.getNannies()
+//    }
+//
+//    LazyColumn(modifier = Modifier.fillMaxSize().padding(16.dp)) {
+//        items(nannies) { nanny ->
+//            NannyItem(nanny = nanny, onClick = {
+//                navController.navigate("detail/${nanny.id}")
+//            })
+//        }
+//    }
+//}
 
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun HomeContent() {
+fun HomeScreen(navController: NavController, repository: NannyRepository) {
     var currentReviewIndex by remember { mutableStateOf(0) }
 
 
@@ -79,7 +79,7 @@ fun HomeContent() {
         Pair("Hewan", R.drawable.animal_icon),
         Pair("Rumah", R.drawable.home_icon)
     )
-    val navController = rememberNavController()
+//    val navController = rememberNavController()
 
     Scaffold(
         bottomBar = {
@@ -116,14 +116,14 @@ fun HomeContent() {
                 shape = RoundedCornerShape(16.dp),
                 elevation = 20.dp,
                 backgroundColor = Blue600,
-                modifier = Modifier
-                    .size(width = 306.dp, height = 170.dp)
+                modifier = Modifier.fillMaxWidth()
+                    .size(width = 0.dp, height = 170.dp)
 
             ) {
                 Row(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(start = 30.dp, end = 0.dp),
+                        .padding(start = 30.dp, end = 0.dp, bottom = 0.dp),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
@@ -156,7 +156,7 @@ fun HomeContent() {
                         modifier = Modifier
                             .size(150.dp)
                             .clip(RoundedCornerShape(16.dp))
-                            .offset(x = (-8).dp, y = (-8).dp),
+                            .offset(x = (-8).dp, y = (-0).dp),
                         alignment = Alignment.BottomEnd
                     )
 
@@ -171,7 +171,7 @@ fun HomeContent() {
                 style = TextStyle(fontSize = 16.sp, fontWeight = FontWeight.SemiBold, fontFamily = Fredoka)
             )
             Spacer(modifier = Modifier.height(12.dp))
-            LazyRow(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+            LazyRow(horizontalArrangement = Arrangement.spacedBy(22.dp), modifier = Modifier.fillMaxWidth()) {
                 items(menuItems) { (title, iconResId) ->
                     MenuItem(
                         title = title,
@@ -370,8 +370,8 @@ fun ReviewCarousel() {
 @Preview(showBackground = true)
 fun PreviewHome(){
     ProjekPAPB2Theme {
-
-        HomeContent()
+//
+//        HomeContent()
     }
 
 }
