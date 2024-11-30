@@ -98,7 +98,7 @@ fun HomeScreen(navController: NavController, repository: NannyRepository) {
                 .padding(horizontal = 34.dp)
 
         ) {
-            Spacer(modifier = Modifier.height(60.dp))
+            Spacer(modifier = Modifier.height(40.dp))
             Text(
                 text = "Selamat datang di",
                 style = TextStyle(fontSize = 24.sp, fontWeight = FontWeight.Medium, fontFamily = Fredoka),
@@ -117,7 +117,7 @@ fun HomeScreen(navController: NavController, repository: NannyRepository) {
                 elevation = 20.dp,
                 backgroundColor = Blue600,
                 modifier = Modifier.fillMaxWidth()
-                    .size(width = 0.dp, height = 170.dp)
+                    .size(width = 0.dp, height = 160.dp)
 
             ) {
                 Row(
@@ -163,7 +163,7 @@ fun HomeScreen(navController: NavController, repository: NannyRepository) {
                 }
             }
 
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(20.dp))
 
 
             Text(
@@ -171,7 +171,7 @@ fun HomeScreen(navController: NavController, repository: NannyRepository) {
                 style = TextStyle(fontSize = 16.sp, fontWeight = FontWeight.SemiBold, fontFamily = Fredoka)
             )
             Spacer(modifier = Modifier.height(12.dp))
-            LazyRow(horizontalArrangement = Arrangement.spacedBy(22.dp), modifier = Modifier.fillMaxWidth()) {
+            LazyRow(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
                 items(menuItems) { (title, iconResId) ->
                     MenuItem(
                         title = title,
@@ -188,7 +188,7 @@ fun HomeScreen(navController: NavController, repository: NannyRepository) {
                 }
             }
 
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(20.dp))
 
 
             Text(
@@ -199,7 +199,7 @@ fun HomeScreen(navController: NavController, repository: NannyRepository) {
 
             ReviewCarousel()
 
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
 
             Button(
@@ -281,6 +281,7 @@ fun ReviewCarousel() {
             elevation = 4.dp,
             modifier = Modifier
                 .fillMaxWidth()
+                .heightIn(max = 120.dp)
                 .border(
                     width = 1.dp,
                     color = Blue600,

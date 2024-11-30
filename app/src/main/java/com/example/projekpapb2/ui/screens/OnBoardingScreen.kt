@@ -54,7 +54,7 @@ fun OnBoardingPage(
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Spacer(modifier = Modifier.height(100.dp))
+        Spacer(modifier = Modifier.height(40.dp))
 
         // Image
         Image(
@@ -92,10 +92,13 @@ fun OnBoardingPage(
         if (isLastPage) {
             Button(
                 onClick = onNextClick,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                        colors = ButtonDefaults.buttonColors(
+                        containerColor = Blue500 ,
+                contentColor = Color.White
+            )
             ) {
-                Text(text = "Lanjut", fontFamily = Fredoka, color = Color(0xFF6667FF),
-                    style = MaterialTheme.typography.bodyMedium, fontSize = 16.sp)
+                Text(text = "Lanjut", fontFamily = Fredoka, style = MaterialTheme.typography.bodyMedium, fontSize = 16.sp)
             }
         } else {
             Column(

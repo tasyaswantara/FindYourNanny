@@ -34,7 +34,7 @@ fun RegisterScreen(navController: NavController, authRepository: AuthRepository)
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 24.dp, vertical = 100.dp),
+            .padding(horizontal = 24.dp, vertical = 40.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         // Header
