@@ -47,6 +47,8 @@ import com.example.projekpapb2.data.repository.NannyRepository
 import com.example.projekpapb2.ui.components.NannyItem
 import com.example.projekpapb2.ui.theme.Blue600
 import com.example.projekpapb2.ui.theme.ProjekPAPB2Theme
+import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
 
 //@Composable
 //fun HomeScreen(navController: NavController, repository: NannyRepository) {
@@ -70,6 +72,7 @@ import com.example.projekpapb2.ui.theme.ProjekPAPB2Theme
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun HomeScreen(navController: NavController, repository: NannyRepository) {
+    val currentUser = Firebase.auth.currentUser
     var currentReviewIndex by remember { mutableStateOf(0) }
 
 
@@ -141,7 +144,7 @@ fun HomeScreen(navController: NavController, repository: NannyRepository) {
                         )
                         Spacer(modifier = Modifier.height(8.dp)) // Jarak antar teks
                         Text(
-                            text = "Keenan Tee",
+                            text = currentUser?.displayName ?: "User",
                             style = TextStyle(
                                 fontSize = 20.sp,
                                 fontWeight = FontWeight.Bold,

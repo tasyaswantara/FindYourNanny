@@ -29,24 +29,10 @@ fun ProfileScreen(navController: NavController) {
     val profileImageUrl = currentUser?.photoUrl
     Scaffold(
         topBar = {
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(100.dp),
-                shape = RoundedCornerShape(bottomStart = 30.dp, bottomEnd = 30.dp),
-                colors = CardDefaults.cardColors(containerColor = Blue600)
-            ) {
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = "Profil",
-                        color = Color.White,
-                        style = TextStyle(fontFamily = Fredoka, fontSize = MaterialTheme.typography.titleLarge.fontSize)
-                    )
-                }
-            }
+            com.example.projekpapb2.ui.components.TopAppBar(
+                navController = navController,
+                title = "Profil"
+            )
         },
         bottomBar = { BottomNavbar(
             navController = navController,

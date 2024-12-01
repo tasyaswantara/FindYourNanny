@@ -1,5 +1,7 @@
 package com.example.projekpapb2.ui.screens
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -18,6 +20,7 @@ import com.example.projekpapb2.data.model.Nanny
 import com.example.projekpapb2.data.repository.NannyRepository
 import com.example.projekpapb2.navigation.NavRoutes
 import com.example.projekpapb2.ui.components.NannyItem
+import com.example.projekpapb2.ui.components.TopAppBar
 
 @Composable
 fun HouseCaretakerScreen(navController: NavController, repository: NannyRepository) {
@@ -26,20 +29,28 @@ fun HouseCaretakerScreen(navController: NavController, repository: NannyReposito
         nannies = repository.getNannies()
     }
 
-    if (nannies.isNotEmpty()) {
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(2),
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp)
-        ) {
-            items(nannies) { nanny ->
-                NannyItem(
-                    nanny = nanny,
-                    onClick = {
-                        navController.navigate(NavRoutes.detailRoute(nanny.id))
-                    }
-                )
+    Column(modifier = Modifier.fillMaxSize()) {
+        // Back Button and Title
+        TopAppBar(navController = navController,title="Daftar Pengurus Rumah")
+
+        // Content
+        if (nannies.isNotEmpty()) {
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(2),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(8.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                items(nannies) { nanny ->
+                    NannyItem(
+                        nanny = nanny,
+                        onClick = {
+                            navController.navigate(NavRoutes.detailRoute(nanny.id))
+                        }
+                    )
+                }
             }
         }
     }

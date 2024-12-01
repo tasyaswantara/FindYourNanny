@@ -24,24 +24,10 @@ fun HistoryScreen(navController: NavController) {
 
     Scaffold(
         topBar = {
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(100.dp),
-                shape = RoundedCornerShape(bottomStart = 30.dp, bottomEnd = 30.dp),
-                colors = CardDefaults.cardColors(containerColor = Blue600)
-            ) {
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = "Riwayat",
-                        color = Color.White,
-                        style = MaterialTheme.typography.titleLarge.copy(fontFamily = Fredoka)
-                    )
-                }
-            }
+            com.example.projekpapb2.ui.components.TopAppBar(
+                navController = navController,
+                title = "Riwayat"
+            )
         },
         bottomBar = {
             BottomNavbar(

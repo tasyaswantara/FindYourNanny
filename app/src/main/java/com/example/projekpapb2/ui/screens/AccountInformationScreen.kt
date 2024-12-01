@@ -13,8 +13,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+
+import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -25,6 +28,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -40,56 +44,84 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import coil.compose.AsyncImage
 import com.example.projekpapb2.R
 import com.example.projekpapb2.ui.components.NannyButton
+import com.example.projekpapb2.ui.components.TopAppBar
 import com.example.projekpapb2.ui.theme.Blue200
 import com.example.projekpapb2.ui.theme.Blue400
 import com.example.projekpapb2.ui.theme.Blue500
 import com.example.projekpapb2.ui.theme.Blue600
 import com.example.projekpapb2.ui.theme.Fredoka
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.UserProfileChangeRequest
+import com.google.firebase.auth.auth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AccountInformationScreen(navController: NavController) {
-    var text by remember { mutableStateOf("Keenan Tee") }
+    val currentUser = Firebase.auth.currentUser
+    val db = FirebaseFirestore.getInstance()
+    var showSuccessPopup by remember { mutableStateOf(false) }
+    var showFailurePopup by remember { mutableStateOf(false) }
+    // State untuk data pengguna
+    var displayName by remember { mutableStateOf(currentUser?.displayName ?: "") }
+    var phoneNumber by remember { mutableStateOf("") }
+    val profileImageUrl = currentUser?.photoUrl
+
+    // Fungsi untuk memuat data dari Firestore
+    fun loadUserData() {
+        currentUser?.uid?.let { uid ->
+            db.collection("users").document(uid).get()
+                .addOnSuccessListener { document ->
+                    if (document.exists()) {
+                        phoneNumber = document.getString("phoneNumber") ?: ""
+                    }
+                }
+                .addOnFailureListener {
+                    showFailurePopup = true
+                }
+        }
+    }
+
+    // Fungsi untuk menyimpan perubahan
+    fun saveProfileChanges() {
+        currentUser?.let { user ->
+            // Update Firebase Authentication profile
+            val profileUpdates = UserProfileChangeRequest.Builder()
+                .setDisplayName(displayName)
+                .build()
+
+            user.updateProfile(profileUpdates)
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        // Update Firestore
+                        val userData = mapOf("phoneNumber" to phoneNumber)
+                        db.collection("users").document(user.uid)
+                            .set(userData, SetOptions.merge()) // Gunakan merge untuk hanya mengubah atribut tertentu
+                            .addOnSuccessListener {
+                                showSuccessPopup = true
+                            }
+                            .addOnFailureListener {
+                                showFailurePopup = true
+                            }
+                    }
+                }
+        }
+    }
+
+    // Memuat data saat layar dibuka
+    LaunchedEffect(Unit) {
+        loadUserData()
+    }
 
     Scaffold(
         topBar = {
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(100.dp),
-                shape = RoundedCornerShape(bottomStart = 30.dp, bottomEnd = 30.dp),
-                colors =  CardDefaults.cardColors(containerColor = Blue600)
-            ) {
-                Box(modifier = Modifier.fillMaxSize()) {
-                    IconButton(
-                        onClick = {
-                            navController.popBackStack()
-                        },
-                        modifier = Modifier
-                            .align(Alignment.CenterStart)
-                            .padding(start = 16.dp)
-                    ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_back),
-                            contentDescription = "Back",
-                            tint = Color.White,
-                            modifier = Modifier.size(30.dp)
-                        )
-                    }
-                    androidx.compose.material3.Text(
-                        text = "Profil",
-                        color = Color.White,
-                        style = TextStyle(fontFamily = Fredoka, fontSize = MaterialTheme.typography.titleLarge.fontSize),
-                        fontSize = 20.sp,
-                        modifier = Modifier
-                            .align(Alignment.Center)
-                            .padding(16.dp),
-                    )
-                }
-            }
+            TopAppBar(navController = navController,title="Profil")
         },
         content = { paddingValues ->
             Column(
@@ -105,13 +137,24 @@ fun AccountInformationScreen(navController: NavController) {
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.ic_profile),
-                        contentDescription = "Profile Picture",
-                        modifier = Modifier
-                            .size(80.dp)
-                            .clip(CircleShape)
-                    )
+                    if (profileImageUrl != null) {
+                        AsyncImage(
+                            model = profileImageUrl.toString(),
+                            contentDescription = "Profile Picture",
+                            modifier = Modifier
+                                .size(80.dp)
+                                .clip(CircleShape)
+                        )
+                    } else {
+                        Image(
+                            painter = painterResource(id = R.drawable.ic_profile),
+                            contentDescription = "Profile Picture",
+                            modifier = Modifier
+                                .size(80.dp)
+                                .clip(CircleShape)
+                        )
+                    }
+
                     Spacer(modifier = Modifier.width(16.dp))
 
                     Column {
@@ -128,8 +171,8 @@ fun AccountInformationScreen(navController: NavController) {
                 Spacer(modifier = Modifier.height(24.dp))
 
                 OutlinedTextField(
-                    value = text,
-                    onValueChange = { text = it },
+                    value = displayName,
+                    onValueChange = { displayName = it },
                     label = {
                         Text(
                             text = "Nama Lengkap",
@@ -152,8 +195,8 @@ fun AccountInformationScreen(navController: NavController) {
                 Spacer(modifier = Modifier.height(20.dp))
 
                 OutlinedTextField(
-                    value = "keenantee@gmail.com",
-                    onValueChange = { text = it },
+                    value = currentUser?.email ?: "",
+                    onValueChange = {  },
                     label = {
                         Text(
                             text = "Email",
@@ -175,8 +218,8 @@ fun AccountInformationScreen(navController: NavController) {
                 Spacer(modifier = Modifier.height(20.dp))
 
                 OutlinedTextField(
-                    value = "085870180275",
-                    onValueChange = { text = it },
+                    value = phoneNumber,
+                    onValueChange = { phoneNumber = it },
                     label = {
                         Text(
                             text = "Nomor Telepon",
@@ -199,14 +242,71 @@ fun AccountInformationScreen(navController: NavController) {
 
                 NannyButton(
                     text = "Ubah",
-                    onClick = { /* Simpan data */ },
+                    onClick = { saveProfileChanges() },
                     containerColor = Blue500,
                     contentColor = Color.White,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(bottom = 16.dp)
                 )
+                if (showSuccessPopup) {
+                    CustomPopup(
+                        title = "Sukses!",
+                        description = "Perubahan berhasil disimpan.",
+                        imageResource = R.drawable.success, // Gambar sukses
+                        onDismiss = { showSuccessPopup = false },
+                        navController = navController
+                    )
+                }
+
+                // Popup Gagal
+                if (showFailurePopup) {
+                    CustomPopup(
+                        title = "Gagal",
+                        description = "Terjadi kesalahan saat menyimpan.",
+                        imageResource = R.drawable.success, // Gambar error
+                        onDismiss = { showFailurePopup = false },
+                        navController = navController
+                    )
+                }
             }
         }
+    )
+}
+@Composable
+fun CustomPopup(
+    navController: NavController,
+    title: String,
+    description: String,
+    imageResource: Int,
+    onDismiss: () -> Unit
+) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        confirmButton = {
+
+        },
+        text = {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Image(
+                    painter = painterResource(id = imageResource),
+                    contentDescription = null,
+                    modifier = Modifier.size(100.dp)
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                Text(text = title, fontSize = 20.sp, fontWeight = FontWeight.Bold)
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(text = description, fontSize = 16.sp)
+                Button(onClick = {
+                    onDismiss()
+                    navController.navigate("profil") }) {
+                    Text("OK")
+                }
+            }
+        },
+        shape = RoundedCornerShape(16.dp),
+
     )
 }
