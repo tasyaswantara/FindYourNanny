@@ -8,6 +8,8 @@ data class Nanny(
     val age: Int = 0,
     val gender: String = "",
     val phoneNumber: String = "",
-    val photo:String=""
-
+    val photo: String = "",
+    val about: String = "",
+    val skill: List<String> = emptyList(),
+    val workExperience: List<String> = emptyList()
 )
