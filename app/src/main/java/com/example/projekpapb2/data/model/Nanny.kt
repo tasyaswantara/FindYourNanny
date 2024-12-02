@@ -7,6 +7,7 @@ data class Nanny(
     val experience: Int = 0,
     val age: Int = 0,
     val gender: String = "",
-    val phoneNumber: String = ""
+    val phoneNumber: String = "",
+    val photo:String=""
 
 )
