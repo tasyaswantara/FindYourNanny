@@ -14,10 +14,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
 import com.example.projekpapb2.data.model.Nanny
+import com.example.projekpapb2.ui.theme.Fredoka
 
 @Composable
 fun NannyItem(nanny: Nanny, onClick: () -> Unit) {
@@ -49,9 +51,11 @@ fun NannyItem(nanny: Nanny, onClick: () -> Unit) {
                 Text(
                     text = nanny.name,
                     style = TextStyle(
-                        fontWeight = androidx.compose.ui.text.font.FontWeight.Bold,
-                        fontSize = 14.sp,
-                        color = Color.Black
+                        fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold,
+                        fontSize = 16.sp,
+                        color = Color.Black,
+                        fontFamily = Fredoka,
+
                     )
                 )
 
@@ -62,7 +66,8 @@ fun NannyItem(nanny: Nanny, onClick: () -> Unit) {
                     text = "${nanny.experience} Tahun Pengalaman",
                     style = TextStyle(
                         fontSize = 12.sp,
-                        color = Color.Gray
+                        color = Color.Black,
+                        fontFamily = Fredoka,
                     )
                 )
 
@@ -71,18 +76,21 @@ fun NannyItem(nanny: Nanny, onClick: () -> Unit) {
                 // Order Button
                 Button(
                     onClick = onClick,
-                    modifier = Modifier.fillMaxWidth(),
-                    colors = androidx.compose.material3.ButtonDefaults.buttonColors(containerColor = Color(0xFF6672EE))
+                    modifier = Modifier.fillMaxWidth().height(30.dp),
+                    colors = androidx.compose.material3.ButtonDefaults.buttonColors(containerColor = Color(0xFF6672EE)),
+                    shape = androidx.compose.foundation.shape.RoundedCornerShape(4.dp)
                 ) {
                     Text(
                         text = "Pesan Jasa",
                         style = TextStyle(
-                            fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold,
+                            fontWeight = androidx.compose.ui.text.font.FontWeight.Medium,
                             fontSize = 12.sp,
-                            color = Color.White
+                            color = Color.White,
+                            fontFamily = Fredoka,
                         )
                     )
                 }
+                Spacer(modifier = Modifier.height(8.dp))
             }
 
         }
