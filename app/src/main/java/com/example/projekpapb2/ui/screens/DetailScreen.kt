@@ -171,7 +171,7 @@ Column( modifier = Modifier
             ) {
                 // Tombol Pesan Sekarang
                 Button(
-                    onClick = { navController.navigate("booking/${it.id}") },
+                    onClick = { navController.navigate("pilih/${it.id}") },
                     colors = ButtonDefaults.buttonColors(containerColor = Blue600),
                     shape = RoundedCornerShape(12.dp), // Membuat tombol rounded
                     modifier = Modifier

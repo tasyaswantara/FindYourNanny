@@ -24,6 +24,7 @@ import com.example.projekpapb2.ui.screens.BabyCaretakerScreen
 import com.example.projekpapb2.ui.screens.ElderlyCaretakerScreen
 import com.example.projekpapb2.ui.screens.OnBoardingInterface
 import com.example.projekpapb2.ui.screens.OnBoardingPage
+import com.example.projekpapb2.ui.screens.PilihJadwalScreen
 
 
 class MainActivity : ComponentActivity() {
@@ -54,6 +55,10 @@ fun FindYourNannyApp() {
         }
         composable("register") {
             RegisterScreen(navController = navController, authRepository = authRepository)
+        }
+        composable("pilih/{nannyId}") {  backStackEntry ->
+            val nannyId = backStackEntry.arguments?.getString("nannyId") ?: ""
+            PilihJadwalScreen(nannyId = nannyId, navController = navController, repository = nannyRepository)
         }
 
         composable("onboarding") {

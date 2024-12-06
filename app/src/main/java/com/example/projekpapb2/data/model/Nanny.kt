@@ -11,5 +11,6 @@ data class Nanny(
     val photo: String = "",
     val about: String = "",
     val skill: List<String> = emptyList(),
-    val workExperience: List<String> = emptyList()
+    val workExperience: List<String> = emptyList(),
+    val jenisLayanan: String = "",
 )
