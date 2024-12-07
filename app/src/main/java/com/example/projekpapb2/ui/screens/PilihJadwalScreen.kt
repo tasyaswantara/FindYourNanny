@@ -266,7 +266,7 @@ fun addEventToCalendar(
     location: String,
     description: String,
     startMillis: Long,
-    endMillis: Long
+    endMillis: Long,
 ) {
     val intent = Intent(Intent.ACTION_INSERT).apply {
         data = CalendarContract.Events.CONTENT_URI
