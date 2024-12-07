@@ -27,16 +27,23 @@ import com.example.projekpapb2.data.model.Nanny
 import com.example.projekpapb2.data.repository.NannyRepository
 import com.example.projekpapb2.ui.theme.Blue600
 import com.example.projekpapb2.ui.theme.Fredoka
+import com.google.firebase.Firebase
+import com.google.firebase.Timestamp
+import com.google.firebase.auth.auth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.type.Date
 import java.util.Calendar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PilihJadwalScreen(nannyId: String, navController: NavController, repository: NannyRepository) {
     val context = LocalContext.current
+    val currentUser = Firebase.auth.currentUser
     var address by remember { mutableStateOf("") }
     var selectedDate by remember { mutableStateOf<Int?>(null) }
     var selectedTime by remember { mutableStateOf<String?>(null) }
     var nanny by remember { mutableStateOf<Nanny?>(null) }
+    val firestore = FirebaseFirestore.getInstance()
 
     LaunchedEffect(nannyId) {
         val nannies = repository.getNannies()
@@ -135,9 +142,32 @@ fun PilihJadwalScreen(nannyId: String, navController: NavController, repository:
                                     startMillis = startMillis,
                                     endMillis = endMillis
                                 )
+                                // Simpan data ke Firestore
+                                val bookingData = hashMapOf(
+                                    "nannyId" to nannyId,
+                                    "title" to "Pemesanan Nanny",
+                                    "location" to address,
+                                    "description" to "Pemesanan nanny di lokasi $address",
+                                    "startTime" to Timestamp(java.util.Date(startMillis)),
+                                    "endTime" to Timestamp(java.util.Date(endMillis)),
+                                    "createdAt" to Timestamp.now(),
+                                    "userId" to (currentUser?.uid ?: "User123"), // Ganti dengan ID pengguna autentik
+                                    "status" to "berlangsung"
+                                )
+
+                                firestore.collection("bookings")
+                                    .add(bookingData)
+                                    .addOnSuccessListener {
+                                        println("Booking berhasil ditambahkan ke Firestore")
+                                        navController.navigate("home") // Navigasi ke halaman Home
+                                    }
+                                    .addOnFailureListener { e ->
+                                        println("Gagal menambahkan booking: ${e.message}")
+                                    }
 
                                 navController.navigate("home")
                             }
+
                             // Menyimpan alamat ke Firestore
 //                        val userId = auth.currentUser?.uid
 //                        if (userId != null) {
