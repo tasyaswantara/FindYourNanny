@@ -1,20 +1,38 @@
 package com.example.projekpapb2.ui.screens
 
+import android.content.Intent
+import android.net.Uri
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ChatBubble
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
@@ -27,17 +45,23 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import coil.compose.rememberImagePainter
+import com.example.projekpapb2.R
 import com.example.projekpapb2.data.model.Nanny
 import com.example.projekpapb2.data.repository.AuthRepository
 import com.example.projekpapb2.data.repository.NannyRepository
 import com.example.projekpapb2.ui.components.TopAppBar
+import com.example.projekpapb2.ui.theme.Blue600
+import com.example.projekpapb2.ui.theme.Fredoka
 import com.example.projekpapb2.ui.utils.openWhatsApp
 
 @Composable
@@ -56,17 +80,21 @@ fun DetailScreen(nannyId: String, navController: NavController, repository: Nann
         "Nanny Putri" to "Dapat menjaga anak dengan baik",
         "Nanny Bunga" to "Berpengalaman, sigap, dan jujur"
     )
+Column( modifier = Modifier
 
-
+    .fillMaxWidth(),
+    horizontalAlignment = Alignment.Start) {
+    TopAppBar(navController = navController,title="Profil Pengurus")
     nanny?.let {
         Column(
             modifier = Modifier
-
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 24.dp)
+                .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.Start
         ) {
-            TopAppBar(navController = navController,title="Profil Pengurus")
-            Spacer(modifier = Modifier.height(24.dp))
+
+
             Column(
                 modifier = Modifier
 
@@ -79,12 +107,14 @@ fun DetailScreen(nannyId: String, navController: NavController, repository: Nann
                 Text(
                     text = it.name,
                     style = MaterialTheme.typography.titleLarge,
-                    color = MaterialTheme.colorScheme.primary
+                    color = Blue600,
+                    fontFamily = Fredoka,
                 )
                 Text(
                     text = "${it.age} Tahun",
                     style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.secondary
+                    color = Color.Black,
+                    fontFamily = Fredoka,
                 )
             }
 
@@ -95,7 +125,8 @@ fun DetailScreen(nannyId: String, navController: NavController, repository: Nann
             Text(
                 text = it.about,
                 style = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier.padding(horizontal = 8.dp)
+                fontFamily = Fredoka,
+
             )
             Spacer(modifier = Modifier.height(24.dp))
 
@@ -110,38 +141,112 @@ fun DetailScreen(nannyId: String, navController: NavController, repository: Nann
                 Text(
                     text = experience,
                     style = MaterialTheme.typography.bodyMedium,
-                    modifier = Modifier.padding(horizontal = 8.dp)
+                    fontFamily = Fredoka,
                 )
             }
             Spacer(modifier = Modifier.height(24.dp))
 
             // Ulasan
             SectionHeader(title = "Ulasan")
-            reviews.forEach { review ->
-                ReviewItem(reviewName = review.first, reviewText = review.second)
+            LazyRow(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp) // Jarak antar item
+            ){
+                items(reviews) { review ->
+                    ReviewItem(
+                        reviewName = review.first,
+                        reviewText = review.second
+                    )
+                }
             }
-            Spacer(modifier = Modifier.height(24.dp))
+
+            Spacer(modifier = Modifier.height(18.dp))
 
             // Tombol Pesan Sekarang
-            Button(
-                onClick = { navController.navigate("booking/${it.id}") },
-                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
+            Row(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .height(48.dp)
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Text("Pesan Sekarang", color = MaterialTheme.colorScheme.onPrimary)
+                // Tombol Pesan Sekarang
+                Button(
+                    onClick = { navController.navigate("pilih/${it.id}") },
+                    colors = ButtonDefaults.buttonColors(containerColor = Blue600),
+                    shape = RoundedCornerShape(12.dp), // Membuat tombol rounded
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(48.dp)
+                ) {
+                    Text(
+                        text = "Pesan Sekarang",
+                        color = Color.White,
+                        style = MaterialTheme.typography.bodyMedium,
+                        fontFamily = Fredoka
+                    )
+                }
+
+                Spacer(modifier = Modifier.width(16.dp))
+
+                // Tombol Ikon Chat
+                Box(
+                    modifier = Modifier
+                        .size(48.dp) // Ukuran gambar
+                        .clickable {
+                            // Membuka WhatsApp dengan nomor nanny
+                            val whatsappIntent = Intent(
+                                Intent.ACTION_VIEW,
+                                Uri.parse("https://wa.me/${it.phoneNumber}")
+                            )
+                            context.startActivity(whatsappIntent)
+                        }
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.chat),
+                        contentDescription = "Chat",
+                        modifier = Modifier.fillMaxSize()
+                    )
+                }
+//                OutlinedButton(
+//                    modifier = Modifier.size(48.dp) .border(
+//                        width = 2.dp,
+//                        color = Blue600,
+//                        shape = RoundedCornerShape(16.dp)
+//                    ),
+//                    onClick = {
+//                        // Membuka WhatsApp dengan nomor nanny
+//                        val whatsappIntent = Intent(
+//                            Intent.ACTION_VIEW,
+//                            Uri.parse("https://wa.me/${it.phoneNumber}")
+//                        )
+//                        context.startActivity(whatsappIntent)
+//                    },
+//                    shape = RoundedCornerShape(12.dp), // Membuat outline button rounded
+//
+//                ) {
+//                    Image(
+//                        painter = painterResource(id = R.drawable.chat),
+//                        contentDescription = "Chat",
+//                        modifier = Modifier.size(32.dp) // Ukuran gambar di dalam tombol
+//                    )
+//                }
             }
+        }
+
         }
     }
 }
+
+
+
 
 @Composable
 fun SectionHeader(title: String) {
     Text(
         text = title,
         style = MaterialTheme.typography.titleMedium,
-        color = MaterialTheme.colorScheme.primary,
+        color = Color.Black,
+        fontFamily = Fredoka,
         modifier = Modifier
             .fillMaxWidth()
             .padding(bottom = 8.dp)
@@ -150,22 +255,35 @@ fun SectionHeader(title: String) {
 
 @Composable
 fun ReviewItem(reviewName: String, reviewText: String) {
-    Row(
+    Column (
         modifier = Modifier
-            .padding(vertical = 8.dp)
-            .fillMaxWidth()
-            .border(1.dp, MaterialTheme.colorScheme.primary, MaterialTheme.shapes.medium)
+            .background(Blue600.copy(alpha = 0.2f), MaterialTheme.shapes.large)
+            .width(180.dp)
+            .height(100.dp)
             .padding(12.dp)
+
     ) {
-        Text(
-            text = reviewName,
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.primary
-        )
+        Row (modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween){
+            Text(
+                text = reviewName,
+                style = MaterialTheme.typography.bodyMedium,
+                color = Blue600,
+                fontFamily = Fredoka,
+            )
+            AsyncImage(
+                model = R.drawable.thumb,
+                contentDescription = "Thumbs Up Icon",
+                modifier = Modifier
+                    .size(20.dp)
+            )
+        }
+
+
         Text(
             text = reviewText,
             style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.secondary
+            color = Color.Black,
+            fontFamily = Fredoka,
         )
     }
 }
@@ -178,7 +296,8 @@ fun ProfileImage(imageUrl: String) {
         modifier = Modifier
             .size(120.dp)
             .clip(CircleShape)
-            .border(4.dp, Color.White, CircleShape),
+            .border(6.dp, Color.White, CircleShape)
+            .shadow(elevation = 8.dp, shape = CircleShape),
         contentScale = ContentScale.Crop
     )
 }
@@ -188,8 +307,8 @@ fun SkillChips(skills: List<String>) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 8.dp),
-        horizontalArrangement = Arrangement.Center
+            .padding(vertical = 2.dp),
+        horizontalArrangement = Arrangement.Start
     ) {
         skills.forEach { skill ->
 
@@ -197,13 +316,19 @@ fun SkillChips(skills: List<String>) {
                 onClick = {},
                 modifier = Modifier
                     .padding(horizontal = 4.dp)
-                    .border(1.dp, MaterialTheme.colorScheme.primary, MaterialTheme.shapes.small)
-                    .padding(horizontal = 12.dp, vertical = 4.dp)
+                    .background(
+                        color = Blue600.copy(alpha = 0.2f),
+                        shape = MaterialTheme.shapes.extraLarge
+                    )
+                    .padding(horizontal = 12.dp, vertical = 1.dp),
+                contentPadding = PaddingValues(0.dp), // Menghapus padding bawaan
             ) {
                 Text(
                     text = skill,
+                    fontFamily = Fredoka,
+                    fontSize = 14.sp,
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.primary
+                    color = Blue600
                 )
             }
         }
