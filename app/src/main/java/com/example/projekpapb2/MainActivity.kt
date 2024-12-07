@@ -24,6 +24,7 @@ import com.example.projekpapb2.ui.screens.BabyCaretakerScreen
 import com.example.projekpapb2.ui.screens.ElderlyCaretakerScreen
 import com.example.projekpapb2.ui.screens.OnBoardingInterface
 import com.example.projekpapb2.ui.screens.OnBoardingPage
+import com.example.projekpapb2.ui.screens.ReviewScreen
 
 
 class MainActivity : ComponentActivity() {
@@ -57,9 +58,13 @@ fun FindYourNannyApp() {
         }
 
         composable("onboarding") {
-            OnBoardingPage(navController = navController, page = OnBoardingInterface(title = "Selamat datang di Find Your Nanny!",
-                description = "Aplikasi Find Your Nanny memudahkan Anda menemukan tenaga bantuan rumah tangga yang berpengalaman dan terpercaya.",
-                image = R.drawable.intro_satu))
+            OnBoardingPage(
+                navController = navController, page = OnBoardingInterface(
+                    title = "Selamat datang di Find Your Nanny!",
+                    description = "Aplikasi Find Your Nanny memudahkan Anda menemukan tenaga bantuan rumah tangga yang berpengalaman dan terpercaya.",
+                    image = R.drawable.intro_satu
+                )
+            )
         }
         composable("home") {
             HomeScreen(navController = navController, repository = nannyRepository)
@@ -78,7 +83,11 @@ fun FindYourNannyApp() {
         }
         composable("detail/{nannyId}") { backStackEntry ->
             val nannyId = backStackEntry.arguments?.getString("nannyId") ?: ""
-            DetailScreen(nannyId = nannyId, navController = navController, repository = nannyRepository)
+            DetailScreen(
+                nannyId = nannyId,
+                navController = navController,
+                repository = nannyRepository
+            )
         }
         composable("booking/{nannyId}") { backStackEntry ->
             BookingScreen(navController = navController)
@@ -91,6 +100,9 @@ fun FindYourNannyApp() {
         }
         composable("history") {
             HistoryScreen(navController = navController)
+        }
+        composable("review") {
+            ReviewScreen(navController = navController)
         }
     }
 }

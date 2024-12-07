@@ -1,14 +1,19 @@
 package com.example.projekpapb2.ui.screens
 
+import com.example.projekpapb2.R
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.White
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -60,7 +65,10 @@ fun HistoryScreen(navController: NavController) {
                     ),
                     shape = RoundedCornerShape(50)
                 ) {
-                    Text("Berlangsung")
+                    Text(
+                        "Berlangsung",
+                        style = TextStyle(fontWeight = FontWeight.Medium, fontFamily = Fredoka)
+                    )
                 }
 
                 OutlinedButton(
@@ -71,7 +79,10 @@ fun HistoryScreen(navController: NavController) {
                     ),
                     shape = RoundedCornerShape(50)
                 ) {
-                    Text("Selesai")
+                    Text(
+                        "Selesai",
+                        style = TextStyle(fontWeight = FontWeight.Medium, fontFamily = Fredoka)
+                    )
                 }
             }
 
@@ -96,12 +107,12 @@ fun OngoingServices() {
     ) {
         repeat(3) {
             ServiceCard(
-                name = "Benny Benson",
+                name = "Rani Maharani",
                 date = "Februari 20, 2024",
                 status = "Layanan sedang berlangsung",
                 statusColor = Color(0xFF4CAF50),
-                buttonText = "Selesai",
-                buttonColor = Color(0xFF7C83FD)
+                showButtons = false, // Tombol Like tidak ditampilkan
+                showCompleteButton = true // Tombol Selesai hanya muncul di tab Berlangsung
             )
             Spacer(modifier = Modifier.height(8.dp))
         }
@@ -117,12 +128,12 @@ fun CompletedServices() {
     ) {
         repeat(2) {
             ServiceCard(
-                name = "Benny Benson",
+                name = "Rani Maharani",
                 date = "Februari 20, 2024",
                 status = "Layanan Selesai",
                 statusColor = if (it % 2 == 0) Color(0xFF4CAF50) else Color(0xFFF44336),
-                buttonText = "",
-                buttonColor = Color.Transparent
+                showButtons = true, // Tombol Like ditampilkan di tab Selesai
+                showCompleteButton = false // Tombol "Selesai" tidak muncul di tab Selesai
             )
             Spacer(modifier = Modifier.height(8.dp))
         }
@@ -135,8 +146,8 @@ fun ServiceCard(
     date: String,
     status: String,
     statusColor: Color,
-    buttonText: String,
-    buttonColor: Color
+    showButtons: Boolean, // Tombol Like di sebelah kiri status
+    showCompleteButton: Boolean = false // Tombol Selesai hanya di tab Berlangsung
 ) {
     Box(
         modifier = Modifier
@@ -156,32 +167,71 @@ fun ServiceCard(
                     .fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
+                // Foto
                 Box(
                     modifier = Modifier
                         .size(48.dp)
-                        .background(Color.Gray, shape = RoundedCornerShape(24.dp)) // Latar ikon putih
-                )
+                        .clip(CircleShape)
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.foto_nanny),
+                        contentDescription = "Foto Nanny"
+                    )
+                }
 
                 Spacer(modifier = Modifier.width(16.dp))
 
+                // Informasi Layanan
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
                         text = name,
                         fontWeight = FontWeight.Bold,
                         fontSize = 16.sp,
-                        color = Color(0xFF7C83FD)
+                        color = Color(0xFF7C83FD),
+                        fontFamily = Fredoka // Ganti font ke Fredoka
                     )
-                    Text(date, fontSize = 14.sp, color = Color.Gray)
-                    Text(status, fontSize = 14.sp, color = statusColor)
+                    Text(
+                        text = date,
+                        fontSize = 14.sp,
+                        color = Color.Gray,
+                        fontFamily = Fredoka // Ganti font ke Fredoka
+                    )
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        // Tombol Like di sebelah kiri status
+                        if (showButtons) {
+                            IconButton(
+                                onClick = { /* Handle Like */ },
+                                modifier = Modifier.size(34.dp)
+                            ) {
+                                Image(
+                                    painter = painterResource(id = R.drawable.like_icon),
+                                    contentDescription = "Like",
+                                    modifier = Modifier.size(34.dp)
+                                )
+                            }
+                        }
+
+                        // Status layanan
+                        Text(
+                            text = status,
+                            fontSize = 14.sp,
+                            color = statusColor,
+                            style = TextStyle(fontWeight = FontWeight.Medium, fontFamily = Fredoka)
+                        )
+                    }
                 }
 
-                if (buttonText.isNotEmpty()) {
+                // Tombol "Selesai" kecil di sebelah kanan hanya di tab Berlangsung
+                if (showCompleteButton) {
                     Button(
-                        onClick = {  },
-                        colors = ButtonDefaults.buttonColors(containerColor = buttonColor),
-                        shape = RoundedCornerShape(50)
+                        onClick = { /* Belum diarahkan */ },
+                        modifier = Modifier
+                            .height(36.dp)
+                            .wrapContentWidth(),
+                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF7C83FD)),
+                        shape = RoundedCornerShape(16.dp)
                     ) {
-                        Text(buttonText, color = Color.White)
+                        Text("Selesai", color = White, fontSize = 12.sp, fontWeight = FontWeight.Bold)
                     }
                 }
             }
