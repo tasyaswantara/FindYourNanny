@@ -54,7 +54,7 @@ fun OnBoardingPage(
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Spacer(modifier = Modifier.height(40.dp))
+        Spacer(modifier = Modifier.height(35.dp))
 
         // Image
         Image(
@@ -62,7 +62,7 @@ fun OnBoardingPage(
             contentDescription = null,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(350.dp)
+                .height(300.dp)
         )
 
         Spacer(modifier = Modifier.height(24.dp))
@@ -70,18 +70,19 @@ fun OnBoardingPage(
         // Title
         Text(
             text = page.title,
-            fontSize = 20.sp,
+            fontSize = 13.sp,
             style = MaterialTheme.typography.displaySmall.copy(fontWeight = FontWeight.Bold),
             color = Blue500,
             fontFamily = Fredoka,
-            modifier = Modifier.padding(horizontal = 16.dp)
+            modifier = Modifier.padding(horizontal = 7.dp),
+            textAlign = TextAlign.Center
         )
 
         Spacer(modifier = Modifier.height(8.dp))
 
         Text(
             text = page.description,
-            fontSize = 14.sp,
+            fontSize = 11.sp,
             color = Color.Gray,
             modifier = Modifier.padding(horizontal = 16.dp),
             fontFamily = Fredoka,
@@ -98,7 +99,7 @@ fun OnBoardingPage(
                 contentColor = Color.White
             )
             ) {
-                Text(text = "Lanjut", fontFamily = Fredoka, style = MaterialTheme.typography.bodyMedium, fontSize = 16.sp)
+                Text(text = "Lanjut", fontFamily = Fredoka, style = MaterialTheme.typography.bodyMedium, fontSize = 12.sp)
             }
         } else {
             Column(
@@ -114,7 +115,7 @@ fun OnBoardingPage(
                         contentColor = Color.White
                     )
                 ) {
-                    Text(text = "Lanjut", fontFamily = Fredoka, style = MaterialTheme.typography.bodyMedium, fontSize = 16.sp)
+                    Text(text = "Lanjut", fontFamily = Fredoka, style = MaterialTheme.typography.bodyMedium, fontSize = 12.sp)
                 }
                 Spacer(modifier = Modifier.height(10.dp))
                 OutlinedButton(
@@ -126,7 +127,7 @@ fun OnBoardingPage(
                     colors = ButtonDefaults.buttonColors(containerColor = Blue100),
                     shape = RoundedCornerShape(20.dp)
                 ) {
-                    Text(text = "Lewati", fontFamily = Fredoka, color = Blue500, style = MaterialTheme.typography.bodyMedium, fontSize = 16.sp)
+                    Text(text = "Lewati", fontFamily = Fredoka, color = Blue500, style = MaterialTheme.typography.bodyMedium, fontSize = 12.sp)
                 }
             }
         }

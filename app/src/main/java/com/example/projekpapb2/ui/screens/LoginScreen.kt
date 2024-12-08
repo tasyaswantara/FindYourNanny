@@ -114,7 +114,7 @@ fun LoginScreen(navController: NavController, authRepository: AuthRepository) {
                 emailError = false // Reset error ketika input berubah
             },
 
-            label = { Text("Email", fontFamily = Fredoka) },
+            label = { Text("Email", fontFamily = Fredoka, fontSize = 12.sp) },
             isError = emailError,
             modifier = Modifier.fillMaxWidth(),
             colors = TextFieldDefaults.outlinedTextFieldColors(
@@ -144,7 +144,7 @@ fun LoginScreen(navController: NavController, authRepository: AuthRepository) {
                 password = it
                 passwordError = false // Reset error ketika input berubah
             },
-            label = { Text("Kata Sandi", fontFamily = Fredoka) },
+            label = { Text("Kata Sandi", fontFamily = Fredoka, fontSize = 12.sp) },
             visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
             trailingIcon = {
                 IconButton(onClick = { passwordVisible = !passwordVisible }) {
@@ -210,7 +210,7 @@ fun LoginScreen(navController: NavController, authRepository: AuthRepository) {
                 .height(48.dp),
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF6667FF))
         ) {
-            Text(text = "Masuk", color = Color.White,fontFamily = Fredoka)
+            Text(text = "Masuk", color = Color.White,fontFamily = Fredoka, fontSize = 12.sp)
         }
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -259,7 +259,7 @@ fun LoginScreen(navController: NavController, authRepository: AuthRepository) {
                 text = "Masuk dengan Google",
                 color = Color.Black,
                 fontFamily = Fredoka,
-                fontSize = 14.sp, // Sesuaikan ukuran font jika perlu
+                fontSize = 12.sp, // Sesuaikan ukuran font jika perlu
                 fontWeight = FontWeight.W500
             )
         }

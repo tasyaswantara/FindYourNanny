@@ -26,7 +26,7 @@ val pages = listOf(
         image = R.drawable.intro_dua
     ),
     OnBoardingInterface(
-        title = "Lihat Ulasan dan Rekomendasi Pengguna Lainnya",
+        title = "Lihat Ulasan dan Rekomendasi Pengguna",
         description = "Dapatkan tenaga bantuan terbaik berdasarkan ulasan dan rekomendasi dari pengguna lainnya.",
         image = R.drawable.intro_tiga
     ),
