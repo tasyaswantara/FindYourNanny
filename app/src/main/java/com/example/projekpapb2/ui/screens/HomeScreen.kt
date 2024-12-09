@@ -1,6 +1,8 @@
 package com.example.projekpapb2.ui.screens
 
 import android.annotation.SuppressLint
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -74,7 +76,7 @@ import com.google.firebase.auth.auth
 fun HomeScreen(navController: NavController, repository: NannyRepository) {
     val currentUser = Firebase.auth.currentUser
     var currentReviewIndex by remember { mutableStateOf(0) }
-
+    val context = LocalContext.current
 
     val menuItems = listOf(
         Pair("Bayi", R.drawable.baby_icon),
@@ -101,7 +103,7 @@ fun HomeScreen(navController: NavController, repository: NannyRepository) {
                 .padding(horizontal = 34.dp)
 
         ) {
-            Spacer(modifier = Modifier.height(40.dp))
+            Spacer(modifier = Modifier.height(80.dp))
             Text(
                 text = "Selamat datang di",
                 style = TextStyle(fontSize = 24.sp, fontWeight = FontWeight.Medium, fontFamily = Fredoka),
@@ -206,7 +208,14 @@ fun HomeScreen(navController: NavController, repository: NannyRepository) {
 
 
             Button(
-                onClick = { /* Handle Contact Action */ },
+                onClick = {
+                    // Membuka WhatsApp dengan nomor nanny
+                    val whatsappIntent = Intent(
+                        Intent.ACTION_VIEW,
+                        Uri.parse("https://wa.me/62895333332907")
+                    )
+
+                    context.startActivity(whatsappIntent) },
                 colors = ButtonDefaults.buttonColors(
                     backgroundColor = Blue100,
                     contentColor = Blue600
