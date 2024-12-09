@@ -38,6 +38,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -61,7 +62,6 @@ import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AccountInformationScreen(navController: NavController) {
@@ -73,6 +73,7 @@ fun AccountInformationScreen(navController: NavController) {
     var displayName by remember { mutableStateOf(currentUser?.displayName ?: "") }
     var phoneNumber by remember { mutableStateOf("") }
     val profileImageUrl = currentUser?.photoUrl
+    var showDeleteAccountPopup by remember { mutableStateOf(false) }
 
     // Fungsi untuk memuat data dari Firestore
     fun loadUserData() {
@@ -119,6 +120,7 @@ fun AccountInformationScreen(navController: NavController) {
     LaunchedEffect(Unit) {
         loadUserData()
     }
+
 
     Scaffold(
         topBar = {
@@ -270,6 +272,64 @@ fun AccountInformationScreen(navController: NavController) {
                         navController = navController
                     )
                 }
+
+                Spacer(modifier = Modifier.height(10.dp))
+
+                NannyButton(
+                    text = "Hapus Akun",
+                    onClick = { showDeleteAccountPopup = true },
+                    containerColor = Blue500,
+                    contentColor = Color.White,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 16.dp)
+                )
+
+                if (showDeleteAccountPopup) {
+                    CustomPopup(
+                        navController = navController,
+                        title = "Konfirmasi Hapus Akun",
+                        description = "Apakah Anda yakin ingin menghapus akun? Tindakan ini tidak dapat dibatalkan.",
+                        imageResource = R.drawable.warning,
+                        onDismiss = { showDeleteAccountPopup = false },
+                        primaryAction = {
+                            FirebaseAuth.getInstance().currentUser?.delete()?.addOnCompleteListener { task ->
+                                if (task.isSuccessful) {
+                                    showSuccessPopup = true
+                                } else {
+                                    showFailurePopup = true
+                                }
+                            }
+                        },
+                        secondaryAction = {
+                            showDeleteAccountPopup = false
+                        }
+                    )
+                }
+
+
+                if (showSuccessPopup) {
+                    CustomPopup(
+                        title = "Sukses!",
+                        description = "Akun Anda telah berhasil dihapus.",
+                        imageResource = R.drawable.success,
+                        onDismiss = {
+                            showSuccessPopup = false
+                            navController.navigate("LoginScreen")
+                        },
+                        navController = navController
+                    )
+                }
+
+                if (showFailurePopup) {
+                    CustomPopup(
+                        title = "Gagal",
+                        description = "Terjadi kesalahan saat menghapus akun. Silakan coba lagi.",
+                        imageResource = R.drawable.error,
+                        onDismiss = { showFailurePopup = false },
+                        navController = navController
+                    )
+                }
             }
         }
     )
@@ -281,12 +341,30 @@ fun CustomPopup(
     description: String,
     imageResource: Int,
     onDismiss: () -> Unit,
-
+    primaryAction: (() -> Unit)? = null, // Fungsi opsional untuk tombol utama
+    secondaryAction: (() -> Unit)? = null // Fungsi opsional untuk tombol sekunder
 ) {
     AlertDialog(
         onDismissRequest = onDismiss,
         confirmButton = {
-
+            primaryAction?.let {
+                Button(onClick = {
+                    it()
+                    onDismiss() // Tutup dialog setelah aksi
+                }) {
+                    Text("Ya", fontFamily = Fredoka)
+                }
+            }
+        },
+        dismissButton = {
+            secondaryAction?.let {
+                Button(onClick = {
+                    it()
+                    onDismiss() // Tutup dialog setelah aksi
+                }) {
+                    Text("Tidak", fontFamily = Fredoka)
+                }
+            }
         },
         text = {
             Column(
@@ -303,15 +381,8 @@ fun CustomPopup(
                 Text(text = title, fontSize = 20.sp, fontWeight = FontWeight.Medium, fontFamily = Fredoka)
                 Spacer(modifier = Modifier.height(12.dp))
                 Text(text = description, fontSize = 16.sp, fontFamily = Fredoka)
-                Spacer(modifier = Modifier.height(12.dp))
-                Button(onClick = {
-                    onDismiss()
-                    navController.navigate("profil") }) {
-                    Text("OK",  fontFamily = Fredoka)
-                }
             }
         },
         shape = RoundedCornerShape(16.dp),
-
     )
 }
