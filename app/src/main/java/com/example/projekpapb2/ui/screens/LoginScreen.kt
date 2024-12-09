@@ -74,10 +74,10 @@ fun LoginScreen(navController: NavController, authRepository: AuthRepository) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 24.dp, vertical = 100.dp),
+            .padding(horizontal = 24.dp, vertical = 70.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Spacer(modifier = Modifier.height(16.dp))
+
         // Selamat datang
         Column(
             modifier = Modifier.fillMaxWidth(),
@@ -89,17 +89,19 @@ fun LoginScreen(navController: NavController, authRepository: AuthRepository) {
                 style = MaterialTheme.typography.headlineSmall.copy(
                     color = Color(0xFF6667FF),
                     fontFamily = Fredoka,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 20.sp
 
                 )
             )
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(3.dp))
             Text(
                 text = "Silakan masuk untuk melanjutkan!",
                 style = MaterialTheme.typography.bodyMedium.copy(
                     color = Color.Gray,
                     fontFamily = Fredoka,
-                    fontWeight = FontWeight.Medium
+                    fontWeight = FontWeight.Medium,
+                    fontSize = 13.sp
                 ),
             )
         }
@@ -114,7 +116,7 @@ fun LoginScreen(navController: NavController, authRepository: AuthRepository) {
                 emailError = false // Reset error ketika input berubah
             },
 
-            label = { Text("Email", fontFamily = Fredoka, fontSize = 12.sp) },
+            label = { Text("Email", fontFamily = Fredoka, fontSize = 14.sp) },
             isError = emailError,
             modifier = Modifier.fillMaxWidth(),
             colors = TextFieldDefaults.outlinedTextFieldColors(
@@ -144,7 +146,7 @@ fun LoginScreen(navController: NavController, authRepository: AuthRepository) {
                 password = it
                 passwordError = false // Reset error ketika input berubah
             },
-            label = { Text("Kata Sandi", fontFamily = Fredoka, fontSize = 12.sp) },
+            label = { Text("Kata Sandi", fontFamily = Fredoka, fontSize = 14.sp) },
             visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
             trailingIcon = {
                 IconButton(onClick = { passwordVisible = !passwordVisible }) {
@@ -245,7 +247,7 @@ fun LoginScreen(navController: NavController, authRepository: AuthRepository) {
             modifier = Modifier
                 .fillMaxWidth()
                 .height(48.dp)
-                .border(1.dp, Color(0xFF6667FF), RoundedCornerShape(16.dp)),
+                .border(1.dp, Color(0xFF6667FF), RoundedCornerShape(30.dp)),
             colors = ButtonDefaults.buttonColors(containerColor = Color.White),
             shape = RoundedCornerShape(16.dp)
         ) {
@@ -271,14 +273,16 @@ fun LoginScreen(navController: NavController, authRepository: AuthRepository) {
             Text(
                 text = "Belum punya Akun?",
                 style = MaterialTheme.typography.bodyMedium.copy(color = Color.Gray),
-                fontFamily = Fredoka
+                fontFamily = Fredoka,
+                fontSize = 12.sp
             )
             TextButton(onClick = { navController.navigate("register") }) {
                 Text(
                     text = "Daftar",
                     color = Color(0xFF6667FF),
                     style = MaterialTheme.typography.bodyMedium,
-                    fontFamily = Fredoka
+                    fontFamily = Fredoka,
+                    fontSize = 12.sp
                 )
             }
         }

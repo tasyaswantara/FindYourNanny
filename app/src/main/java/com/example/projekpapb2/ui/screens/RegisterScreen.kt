@@ -15,6 +15,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.projekpapb2.data.repository.AuthRepository
 import com.example.projekpapb2.ui.theme.Fredoka
@@ -47,7 +48,8 @@ fun RegisterScreen(navController: NavController, authRepository: AuthRepository)
                 style = MaterialTheme.typography.headlineSmall.copy(
                     color = Color(0xFF6667FF),
                     fontFamily = Fredoka,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 20.sp
                 )
             )
             Spacer(modifier = Modifier.height(8.dp))
@@ -67,7 +69,7 @@ fun RegisterScreen(navController: NavController, authRepository: AuthRepository)
         OutlinedTextField(
             value = fullName,
             onValueChange = { fullName = it },
-            label = { Text("Nama Lengkap", fontFamily = Fredoka) },
+            label = { Text("Nama Lengkap", fontFamily = Fredoka, fontSize = 12.sp) },
             modifier = Modifier.fillMaxWidth(),
             colors = TextFieldDefaults.outlinedTextFieldColors(
                 focusedBorderColor = Color(0xFF6667FF),
@@ -83,7 +85,7 @@ fun RegisterScreen(navController: NavController, authRepository: AuthRepository)
         OutlinedTextField(
             value = email,
             onValueChange = { email = it },
-            label = { Text("Email", fontFamily = Fredoka) },
+            label = { Text("Email", fontFamily = Fredoka,fontSize = 12.sp) },
             modifier = Modifier.fillMaxWidth(),
             colors = TextFieldDefaults.outlinedTextFieldColors(
                 focusedBorderColor = Color(0xFF6667FF),
@@ -99,7 +101,7 @@ fun RegisterScreen(navController: NavController, authRepository: AuthRepository)
         OutlinedTextField(
             value = phoneNumber,
             onValueChange = { phoneNumber = it },
-            label = { Text("Nomor Telepon", fontFamily = Fredoka) },
+            label = { Text("Nomor Telepon", fontFamily = Fredoka, fontSize = 12.sp) },
             modifier = Modifier.fillMaxWidth(),
             colors = TextFieldDefaults.outlinedTextFieldColors(
                 focusedBorderColor = Color(0xFF6667FF),
@@ -115,7 +117,7 @@ fun RegisterScreen(navController: NavController, authRepository: AuthRepository)
         OutlinedTextField(
             value = password,
             onValueChange = { password = it },
-            label = { Text("Kata Sandi", fontFamily = Fredoka) },
+            label = { Text("Kata Sandi", fontFamily = Fredoka, fontSize = 12.sp) },
             visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
             trailingIcon = {
                 IconButton(onClick = { passwordVisible = !passwordVisible }) {
@@ -139,7 +141,7 @@ fun RegisterScreen(navController: NavController, authRepository: AuthRepository)
         OutlinedTextField(
             value = confirmPassword,
             onValueChange = { confirmPassword = it },
-            label = { Text("Konfirmasi Kata Sandi", fontFamily = Fredoka) },
+            label = { Text("Konfirmasi Kata Sandi", fontFamily = Fredoka, fontSize = 12.sp) },
             visualTransformation = if (confirmPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
             trailingIcon = {
                 IconButton(onClick = { confirmPasswordVisible = !confirmPasswordVisible }) {
@@ -149,7 +151,7 @@ fun RegisterScreen(navController: NavController, authRepository: AuthRepository)
                     )
                 }
             },
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth().height(48.dp),
             colors = TextFieldDefaults.outlinedTextFieldColors(
                 focusedBorderColor = Color(0xFF6667FF),
                 unfocusedBorderColor = Color.Gray,
@@ -177,26 +179,28 @@ fun RegisterScreen(navController: NavController, authRepository: AuthRepository)
                 .fillMaxWidth()
                 .height(48.dp),
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF6667FF)),
-            shape = RoundedCornerShape(16.dp)
+            shape = RoundedCornerShape(30.dp)
         ) {
-            Text("Daftar", color = Color.White, fontFamily = Fredoka)
+            Text("Daftar", color = Color.White, fontFamily = Fredoka, fontSize = 14.sp)
         }
 
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(18.dp))
 
         // Login Redirect
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
                 text = "Sudah punya akun?",
                 style = MaterialTheme.typography.bodyMedium.copy(color = Color.Gray),
-                fontFamily = Fredoka
+                fontFamily = Fredoka,
+                fontSize = 12.sp
             )
             TextButton(onClick = { navController.navigate("login") }) {
                 Text(
                     text = "Masuk",
                     color = Color(0xFF6667FF),
                     style = MaterialTheme.typography.bodyMedium,
-                    fontFamily = Fredoka
+                    fontFamily = Fredoka,
+                    fontSize = 12.sp
                 )
             }
         }
