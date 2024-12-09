@@ -1,51 +1,48 @@
 package com.example.projekpapb2.ui.screens
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import coil.compose.AsyncImage
 import com.example.projekpapb2.R
+import com.example.projekpapb2.ui.components.BottomNavbar
 import com.example.projekpapb2.ui.theme.*
+import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
 
-@Preview
-@OptIn(ExperimentalMaterial3Api::class)
+
 @Composable
-fun ProfileScreen() {
+fun ProfileScreen(navController: NavController) {
+    val currentUser = Firebase.auth.currentUser
+    val profileImageUrl = currentUser?.photoUrl
     Scaffold(
         topBar = {
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(100.dp),
-                shape = RoundedCornerShape(bottomStart = 30.dp, bottomEnd = 30.dp),
-                colors = CardDefaults.cardColors(containerColor = Blue600)
-            ) {
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = "Profil",
-                        color = Color.White,
-                        style = TextStyle(fontFamily = Fredoka, fontSize = MaterialTheme.typography.titleLarge.fontSize)
-                    )
-                }
-            }
+            com.example.projekpapb2.ui.components.TopAppBar(
+                navController = navController,
+                title = "Profil"
+            )
         },
-        bottomBar = { BottomNavigationBar() }
+        bottomBar = { BottomNavbar(
+            navController = navController,
+            selectedScreen = "Profil",
+            onItemSelected = { selected ->
+                println("Selected screen: $selected")
+            }
+        ) }
     ) { contentPadding ->
         Column(
             modifier = Modifier
@@ -59,23 +56,33 @@ fun ProfileScreen() {
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Image(
-                    painter = painterResource(id = R.drawable.ic_profile),
-                    contentDescription = "Profile Picture",
-                    modifier = Modifier
-                        .size(80.dp)
-                        .clip(CircleShape)
-                )
+                if (profileImageUrl != null) {
+                    AsyncImage(
+                        model = profileImageUrl.toString(),
+                        contentDescription = "Profile Picture",
+                        modifier = Modifier
+                            .size(80.dp)
+                            .clip(CircleShape)
+                    )
+                } else {
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_profile),
+                        contentDescription = "Default Profile Picture",
+                        modifier = Modifier
+                            .size(80.dp)
+                            .clip(CircleShape)
+                    )
+                }
                 Spacer(modifier = Modifier.width(16.dp))
 
                 Column {
                     Text(
-                        text = "Keenan Tee",
+                        text = currentUser?.displayName ?: "Nama Tidak Diketahui",
                         style = TextStyle(fontFamily = Fredoka, fontSize = MaterialTheme.typography.titleLarge.fontSize),
                         color = Blue600
                     )
                     Text(
-                        text = "keenantee@gmail.com",
+                        text = currentUser?.email ?: "Email Tidak Tersedia",
                         style = TextStyle(fontFamily = Fredoka, fontSize = MaterialTheme.typography.bodyMedium.fontSize),
                         color = Blue200
                     )
@@ -83,18 +90,29 @@ fun ProfileScreen() {
             }
 
             Spacer(modifier = Modifier.height(24.dp))
-            ProfileMenuItem(icon = R.drawable.ic_account, title = "Informasi Akun")
-            ProfileMenuItem(icon = R.drawable.ic_notification, title = "Notifikasi")
-            ProfileMenuItem(icon = R.drawable.ic_logout, title = "Keluar Akun")
+            ProfileMenuItem(icon = R.drawable.ic_account, title = "Informasi Akun", "accountinfo", navController = navController)
+            ProfileMenuItem(icon = R.drawable.ic_notification, title = "Notifikasi","notifikasi", navController = navController)
+            ProfileMenuItem(icon = R.drawable.ic_logout, title = "Keluar Akun",null, navController = navController,onClick = {
+                Firebase.auth.signOut() // Logout dari Firebase
+                navController.navigate("login") { // Navigasi ke layar login
+                    popUpTo(0)}
+
+
+                })
         }
     }
 }
 
 @Composable
-fun ProfileMenuItem(icon: Int, title: String) {
+fun ProfileMenuItem(icon: Int, title: String, navigate: String?, navController: NavController, onClick: (() -> Unit)? = null) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
+            .clickable {
+                onClick?.invoke() ?: navigate?.let {
+                    navController.navigate(it)
+                }
+            }
             .padding(vertical = 12.dp)
     ) {
         Icon(
@@ -118,60 +136,55 @@ fun ProfileMenuItem(icon: Int, title: String) {
 }
 
 @Composable
-fun BottomNavigationBar() {
-    val selectedIndex = remember { mutableStateOf(0) }
+fun PopupLogout(
+    navController: NavController,
+    title: String,
+    description: String,
+    imageResource: Int,
+    onDismiss: () -> Unit,
 
-    NavigationBar(
-        containerColor = Blue100,
-        tonalElevation = 4.dp
     ) {
-        NavigationBarItem(
-            icon = {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_home),
-                    contentDescription = "Beranda"
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        confirmButton = {
+
+        },
+        text = {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Image(
+                    painter = painterResource(id = imageResource),
+                    contentDescription = null,
+                    modifier = Modifier.size(100.dp)
                 )
-            },
-            label = { Text("Beranda", style = TextStyle(fontFamily = Fredoka, fontSize = MaterialTheme.typography.bodyMedium.fontSize)) },
-            selected = selectedIndex.value == 0,
-            onClick = { selectedIndex.value = 0 },
-            colors = NavigationBarItemDefaults.colors(
-                indicatorColor = Blue300,
-                selectedIconColor = Color.Black,
-                selectedTextColor = Color.Black
-            )
-        )
-        NavigationBarItem(
-            icon = {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_history),
-                    contentDescription = "Riwayat"
+                Spacer(modifier = Modifier.height(16.dp))
+                Text(
+                    text = "Keluar Akun",
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Medium,
+                    fontFamily = Fredoka,
+                    color = Blue600
                 )
-            },
-            label = { Text("Riwayat", style = TextStyle(fontFamily = Fredoka, fontSize = MaterialTheme.typography.bodyMedium.fontSize)) },
-            selected = selectedIndex.value == 1,
-            onClick = { selectedIndex.value = 1 },
-            colors = NavigationBarItemDefaults.colors(
-                indicatorColor = Blue300,
-                selectedIconColor = Color.Black,
-                selectedTextColor = Color.Black
-            )
-        )
-        NavigationBarItem(
-            icon = {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_profilenavbar),
-                    contentDescription = "Profil"
+                Spacer(modifier = Modifier.height(12.dp))
+                Text(
+                    text = "Apakah Anda yakin untuk keluar?",
+                    fontSize = 16.sp,
+                    fontFamily = Fredoka,
+                    color = Blue600
                 )
-            },
-            label = { Text("Profil", style = TextStyle(fontFamily = Fredoka, fontSize = MaterialTheme.typography.bodyMedium.fontSize)) },
-            selected = selectedIndex.value == 2,
-            onClick = { selectedIndex.value = 2 },
-            colors = NavigationBarItemDefaults.colors(
-                indicatorColor = Blue300,
-                selectedIconColor = Color.Black,
-                selectedTextColor = Color.Black
-            )
+                Spacer(modifier = Modifier.height(12.dp))
+                androidx.compose.material.Button(onClick = {
+                    onDismiss()
+                    navController.navigate("profil")
+                }) {
+                    androidx.compose.material.Text("Tidak", fontFamily = Fredoka)
+                }
+            }
+        },
+        shape = RoundedCornerShape(16.dp),
+
         )
-    }
 }

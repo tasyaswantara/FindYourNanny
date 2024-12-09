@@ -1,16 +1,20 @@
 package com.example.projekpapb2.ui.components
 
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.projekpapb2.R
 import com.example.projekpapb2.ui.theme.Fredoka
 import com.example.projekpapb2.ui.theme.ProjekPAPB2Theme
@@ -18,6 +22,7 @@ import com.example.projekpapb2.ui.theme.Blue100
 
 @Composable
 fun BottomNavbar(
+    navController: NavController,
     selectedScreen: String,
     onItemSelected: (String) -> Unit
 ) {
@@ -28,13 +33,15 @@ fun BottomNavbar(
 
         BottomNavigationItem(
             selected = selectedScreen == "Beranda",
-            onClick = { onItemSelected("Beranda") },
+            onClick = { onItemSelected("Beranda");
+                navController.navigate("home") },
             icon = {
                 Icon(
                     painter = painterResource(
                         id = if (selectedScreen == "Beranda") R.drawable.icon_home_full else R.drawable.icon_home
                     ),
-                    contentDescription = "Home"
+                    contentDescription = "Home",
+                    modifier = Modifier.size(22.dp)
                 )
             },
             label = {
@@ -52,13 +59,17 @@ fun BottomNavbar(
 
         BottomNavigationItem(
             selected = selectedScreen == "Riwayat",
-            onClick = { onItemSelected("Riwayat") },
+            onClick = {
+                onItemSelected("Riwayat");
+                navController.navigate("history")
+            },
             icon = {
                 Icon(
                     painter = painterResource(
                         id = if (selectedScreen == "Riwayat") R.drawable.icon_history else R.drawable.icon_history
                     ),
-                    contentDescription = "History"
+                    contentDescription = "History",
+                    modifier = Modifier.size(22.dp)
                 )
             },
             label = {
@@ -76,13 +87,17 @@ fun BottomNavbar(
 
         BottomNavigationItem(
             selected = selectedScreen == "Profil",
-            onClick = { onItemSelected("Profil") },
+            onClick = {
+                onItemSelected("Profil");
+                navController.navigate("profil")
+            },
             icon = {
                 Icon(
                     painter = painterResource(
                         id = if (selectedScreen == "Profil") R.drawable.icon_profile_full else R.drawable.icon_profile
                     ),
-                    contentDescription = "Profile"
+                    contentDescription = "Profile",
+                    modifier = Modifier.size(22.dp)
                 )
             },
             label = {
@@ -103,12 +118,13 @@ fun BottomNavbar(
 @Composable
 fun PreviewBottomNavbar() {
     ProjekPAPB2Theme {
-        BottomNavbar(
-            selectedScreen = "Beranda",
-            onItemSelected = { selected ->
-                println("Selected screen: $selected")
-            }
-        )
+//        BottomNavbar(
+//            navController = navController,
+//            selectedScreen = "Beranda",
+//            onItemSelected = { selected ->
+//                println("Selected screen: $selected")
+//            }
+//        )
     }
 }
 
