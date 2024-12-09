@@ -27,6 +27,7 @@ import com.example.projekpapb2.ui.screens.OnBoardingInterface
 import com.example.projekpapb2.ui.screens.OnBoardingPage
 import com.example.projekpapb2.ui.screens.ReviewScreen
 import com.example.projekpapb2.ui.screens.PilihJadwalScreen
+import com.google.firebase.auth.FirebaseAuth
 
 
 class MainActivity : ComponentActivity() {
@@ -37,20 +38,22 @@ class MainActivity : ComponentActivity() {
         FirebaseApp.initializeApp(this)
 
         setContent {
-            FindYourNannyApp()
+            val isLoggedIn = FirebaseAuth.getInstance().currentUser != null
+            val startDestination = if (isLoggedIn) "home" else "onboarding"
+            FindYourNannyApp(startDestination)
         }
     }
 }
 
 @Composable
-fun FindYourNannyApp() {
+fun FindYourNannyApp(startDestination: String) {
     val navController = rememberNavController()
     val authRepository = AuthRepository()
     val nannyRepository = NannyRepository()
 
     NavHost(
         navController = navController,
-        startDestination = "onboarding"
+        startDestination = startDestination
     ) {
         composable("login") {
             LoginScreen(navController = navController, authRepository = authRepository)

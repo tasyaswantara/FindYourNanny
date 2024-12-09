@@ -69,6 +69,8 @@ fun AccountInformationScreen(navController: NavController) {
     val db = FirebaseFirestore.getInstance()
     var showSuccessPopup by remember { mutableStateOf(false) }
     var showFailurePopup by remember { mutableStateOf(false) }
+    var showSuccessPopup2 by remember { mutableStateOf(false) }
+    var showFailurePopup2 by remember { mutableStateOf(false) }
     // State untuk data pengguna
     var displayName by remember { mutableStateOf(currentUser?.displayName ?: "") }
     var phoneNumber by remember { mutableStateOf("") }
@@ -106,10 +108,10 @@ fun AccountInformationScreen(navController: NavController) {
                         db.collection("users").document(user.uid)
                             .set(userData, SetOptions.merge()) // Gunakan merge untuk hanya mengubah atribut tertentu
                             .addOnSuccessListener {
-                                showSuccessPopup = true
+                                showSuccessPopup2 = true
                             }
                             .addOnFailureListener {
-                                showFailurePopup = true
+                                showFailurePopup2 = true
                             }
                     }
                 }
@@ -162,7 +164,7 @@ fun AccountInformationScreen(navController: NavController) {
 
                     Column {
                         androidx.compose.material3.Text(
-                            text = "Keenan Tee",
+                            text = displayName,
                             style = TextStyle(fontFamily = Fredoka, fontSize = MaterialTheme.typography.titleLarge.fontSize),
                             fontSize = 20.sp,
                             fontWeight = FontWeight.Bold,
@@ -252,24 +254,26 @@ fun AccountInformationScreen(navController: NavController) {
                         .fillMaxWidth()
                         .padding(bottom = 16.dp)
                 )
-                if (showSuccessPopup) {
-                    CustomPopup(
+                if (showSuccessPopup2) {
+                    CustomPopup2(
                         title = "Sukses!",
                         description = "Perubahan berhasil disimpan.",
                         imageResource = R.drawable.success, // Gambar sukses
-                        onDismiss = { showSuccessPopup = false },
-                        navController = navController
-                    )
+                        onDismiss = { showSuccessPopup2 = false },
+                        navController = navController,
+
+                            )
                 }
 
                 // Popup Gagal
-                if (showFailurePopup) {
-                    CustomPopup(
+                if (showFailurePopup2) {
+                    CustomPopup2(
                         title = "Gagal",
                         description = "Terjadi kesalahan saat menyimpan.",
                         imageResource = R.drawable.success, // Gambar error
-                        onDismiss = { showFailurePopup = false },
-                        navController = navController
+                        onDismiss = { showFailurePopup2 = false },
+                        navController = navController,
+
                     )
                 }
 
@@ -332,6 +336,44 @@ fun AccountInformationScreen(navController: NavController) {
                 }
             }
         }
+    )
+}
+@Composable
+fun CustomPopup2(
+    navController: NavController,
+    title: String,
+    description: String,
+    imageResource: Int,
+    onDismiss: () -> Unit,
+) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        confirmButton = {
+        },
+        text = {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Image(
+                    painter = painterResource(id = imageResource),
+                    contentDescription = null,
+                    modifier = Modifier.size(100.dp)
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                Text(text = title, fontSize = 20.sp, fontWeight = FontWeight.Medium, fontFamily = Fredoka)
+                Spacer(modifier = Modifier.height(12.dp))
+                Text(text = description, fontSize = 16.sp, fontFamily = Fredoka)
+                Spacer(modifier = Modifier.height(12.dp))
+                Button(onClick = {
+                    onDismiss()
+                    navController.navigate("profil") }) {
+                    Text("OK",  fontFamily = Fredoka)
+                }
+            }
+        },
+        shape = RoundedCornerShape(16.dp),
     )
 }
 @Composable

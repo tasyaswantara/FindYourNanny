@@ -166,7 +166,7 @@ fun RegisterScreen(navController: NavController, authRepository: AuthRepository)
         Button(
             onClick = {
                 if (password == confirmPassword) {
-                    authRepository.register(email, password, {
+                    authRepository.register(email, password, fullName, phoneNumber, {
                         navController.navigate("login")
                     }, {
                         errorMessage = it
