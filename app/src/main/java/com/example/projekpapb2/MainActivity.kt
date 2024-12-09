@@ -22,6 +22,7 @@ import com.google.firebase.FirebaseApp
 import com.example.projekpapb2.ui.screens.AnimalCaretakerScreen
 import com.example.projekpapb2.ui.screens.BabyCaretakerScreen
 import com.example.projekpapb2.ui.screens.ElderlyCaretakerScreen
+import com.example.projekpapb2.ui.screens.NotificationScreen
 import com.example.projekpapb2.ui.screens.OnBoardingInterface
 import com.example.projekpapb2.ui.screens.OnBoardingPage
 import com.example.projekpapb2.ui.screens.ReviewScreen
@@ -102,6 +103,9 @@ fun FindYourNannyApp() {
         }
         composable("accountinfo") {
             AccountInformationScreen(navController = navController)
+        }
+        composable("notifikasi") {
+            NotificationScreen(navController = navController)
         }
         composable("history") {
             HistoryScreen(navController = navController)

@@ -13,7 +13,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.projekpapb2.R
@@ -89,7 +91,7 @@ fun ProfileScreen(navController: NavController) {
 
             Spacer(modifier = Modifier.height(24.dp))
             ProfileMenuItem(icon = R.drawable.ic_account, title = "Informasi Akun", "accountinfo", navController = navController)
-            ProfileMenuItem(icon = R.drawable.ic_notification, title = "Notifikasi",null, navController = navController)
+            ProfileMenuItem(icon = R.drawable.ic_notification, title = "Notifikasi","notifikasi", navController = navController)
             ProfileMenuItem(icon = R.drawable.ic_logout, title = "Keluar Akun",null, navController = navController,onClick = {
                 Firebase.auth.signOut() // Logout dari Firebase
                 navController.navigate("login") { // Navigasi ke layar login
@@ -131,4 +133,58 @@ fun ProfileMenuItem(icon: Int, title: String, navigate: String?, navController: 
             tint = Grey
         )
     }
+}
+
+@Composable
+fun PopupLogout(
+    navController: NavController,
+    title: String,
+    description: String,
+    imageResource: Int,
+    onDismiss: () -> Unit,
+
+    ) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        confirmButton = {
+
+        },
+        text = {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Image(
+                    painter = painterResource(id = imageResource),
+                    contentDescription = null,
+                    modifier = Modifier.size(100.dp)
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                Text(
+                    text = "Keluar Akun",
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Medium,
+                    fontFamily = Fredoka,
+                    color = Blue600
+                )
+                Spacer(modifier = Modifier.height(12.dp))
+                Text(
+                    text = "Apakah Anda yakin untuk keluar?",
+                    fontSize = 16.sp,
+                    fontFamily = Fredoka,
+                    color = Blue600
+                )
+                Spacer(modifier = Modifier.height(12.dp))
+                androidx.compose.material.Button(onClick = {
+                    onDismiss()
+                    navController.navigate("profil")
+                }) {
+                    androidx.compose.material.Text("Tidak", fontFamily = Fredoka)
+                }
+            }
+        },
+        shape = RoundedCornerShape(16.dp),
+
+        )
 }

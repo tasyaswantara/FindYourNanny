@@ -1,6 +1,7 @@
 package com.example.projekpapb2.ui.screens
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -279,7 +280,8 @@ fun CustomPopup(
     title: String,
     description: String,
     imageResource: Int,
-    onDismiss: () -> Unit
+    onDismiss: () -> Unit,
+
 ) {
     AlertDialog(
         onDismissRequest = onDismiss,
@@ -288,7 +290,9 @@ fun CustomPopup(
         },
         text = {
             Column(
-                horizontalAlignment = Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center,
+                modifier = Modifier.fillMaxWidth()
             ) {
                 Image(
                     painter = painterResource(id = imageResource),
@@ -296,13 +300,14 @@ fun CustomPopup(
                     modifier = Modifier.size(100.dp)
                 )
                 Spacer(modifier = Modifier.height(16.dp))
-                Text(text = title, fontSize = 20.sp, fontWeight = FontWeight.Bold)
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(text = description, fontSize = 16.sp)
+                Text(text = title, fontSize = 20.sp, fontWeight = FontWeight.Medium, fontFamily = Fredoka)
+                Spacer(modifier = Modifier.height(12.dp))
+                Text(text = description, fontSize = 16.sp, fontFamily = Fredoka)
+                Spacer(modifier = Modifier.height(12.dp))
                 Button(onClick = {
                     onDismiss()
                     navController.navigate("profil") }) {
-                    Text("OK")
+                    Text("OK",  fontFamily = Fredoka)
                 }
             }
         },
