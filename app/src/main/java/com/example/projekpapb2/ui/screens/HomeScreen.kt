@@ -13,13 +13,11 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -52,23 +50,6 @@ import com.example.projekpapb2.ui.theme.ProjekPAPB2Theme
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 
-//@Composable
-//fun HomeScreen(navController: NavController, repository: NannyRepository) {
-//    val context = LocalContext.current
-//    var nannies by remember { mutableStateOf(listOf<Nanny>()) }
-//
-//    LaunchedEffect(Unit) {
-//        nannies = repository.getNannies()
-//    }
-//
-//    LazyColumn(modifier = Modifier.fillMaxSize().padding(16.dp)) {
-//        items(nannies) { nanny ->
-//            NannyItem(nanny = nanny, onClick = {
-//                navController.navigate("detail/${nanny.id}")
-//            })
-//        }
-//    }
-//}
 
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -383,8 +364,7 @@ fun ReviewCarousel() {
 @Preview(showBackground = true)
 fun PreviewHome(){
     ProjekPAPB2Theme {
-//
-//        HomeContent()
+
     }
 
 }

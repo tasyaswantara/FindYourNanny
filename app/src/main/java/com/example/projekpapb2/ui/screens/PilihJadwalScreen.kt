@@ -8,11 +8,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -32,7 +30,6 @@ import com.google.firebase.Firebase
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.type.Date
 import java.time.LocalDate
 import java.time.format.TextStyle
 import java.util.Calendar
@@ -186,20 +183,6 @@ fun PilihJadwalScreen(nannyId: String, service:String, navController: NavControl
                                 navController.navigate("home")
                             }
 
-                            // Menyimpan alamat ke Firestore
-//                        val userId = auth.currentUser?.uid
-//                        if (userId != null) {
-//                            val userRef = firestore.collection("users").document(userId)
-//                            userRef.update("address", address)
-//                                .addOnSuccessListener {
-//                                    // Alamat berhasil disimpan
-//                                }
-//                                .addOnFailureListener { e ->
-//                                    // Gagal menyimpan alamat
-//                                }
-//                        }
-//
-//                        navController.navigate("home")
 
                         },
                         colors = ButtonDefaults.buttonColors(containerColor = Blue600),

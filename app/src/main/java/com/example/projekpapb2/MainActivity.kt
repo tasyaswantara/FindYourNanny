@@ -11,7 +11,6 @@ import com.example.projekpapb2.data.repository.AuthRepository
 import com.example.projekpapb2.data.repository.BookingRepository
 import com.example.projekpapb2.data.repository.NannyRepository
 import com.example.projekpapb2.ui.screens.AccountInformationScreen
-import com.example.projekpapb2.ui.screens.BookingScreen
 import com.example.projekpapb2.ui.screens.DetailScreen
 import com.example.projekpapb2.ui.screens.HistoryScreen
 import com.example.projekpapb2.ui.screens.HomeScreen
@@ -103,10 +102,7 @@ fun FindYourNannyApp(startDestination: String) {
                 service = service
             )
         }
-        composable("booking/{nannyId}/{service}") { backStackEntry ->
-            val service = backStackEntry.arguments?.getString("service")?: ""
-            BookingScreen(navController = navController,service = service)
-        }
+
         composable("profil") {
             ProfileScreen(navController = navController)
         }
