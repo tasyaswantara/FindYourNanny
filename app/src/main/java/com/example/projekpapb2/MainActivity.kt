@@ -8,6 +8,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.projekpapb2.data.repository.AuthRepository
+import com.example.projekpapb2.data.repository.BookingRepository
 import com.example.projekpapb2.data.repository.NannyRepository
 import com.example.projekpapb2.ui.screens.AccountInformationScreen
 import com.example.projekpapb2.ui.screens.BookingScreen
@@ -50,6 +51,7 @@ fun FindYourNannyApp(startDestination: String) {
     val navController = rememberNavController()
     val authRepository = AuthRepository()
     val nannyRepository = NannyRepository()
+    val bookingRepository = BookingRepository()
 
     NavHost(
         navController = navController,
@@ -115,10 +117,13 @@ fun FindYourNannyApp(startDestination: String) {
             NotificationScreen(navController = navController)
         }
         composable("history") {
-            HistoryScreen(navController = navController)
+            HistoryScreen(navController = navController, repository = bookingRepository, nannyrepository = nannyRepository)
         }
-        composable("review") {
-            ReviewScreen(navController = navController)
+        composable("review/{bookingId}") { backStackEntry ->
+            val bookingId = backStackEntry.arguments?.getString("bookingId")?: ""
+            ReviewScreen(navController = navController, bookingId = bookingId, nannyrepository = nannyRepository,bookingRepository = bookingRepository)
         }
+
+
     }
 }

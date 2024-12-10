@@ -148,6 +148,7 @@ fun PilihJadwalScreen(nannyId: String, service:String, navController: NavControl
                                 )
                                 // Simpan data ke Firestore
                                 val bookingData = hashMapOf(
+                                    "id" to "",
                                     "nannyId" to nannyId,
                                     "title" to "Pemesanan Nanny",
                                     "location" to address,
@@ -161,7 +162,20 @@ fun PilihJadwalScreen(nannyId: String, service:String, navController: NavControl
 
                                 firestore.collection("bookings")
                                     .add(bookingData)
-                                    .addOnSuccessListener {
+                                    .addOnSuccessListener {documentReference ->
+                                        val newBookingId = documentReference.id
+                                        val updatedBookingData = bookingData.toMutableMap()
+                                        updatedBookingData["id"] = newBookingId
+
+                                        firestore.collection("bookings")
+                                            .document(newBookingId) // Use the newly generated document ID
+                                            .set(updatedBookingData) // Save the updated data with the correct ID
+                                            .addOnSuccessListener {
+                                                println("Booking ID updated successfully")
+                                            }
+                                            .addOnFailureListener { e ->
+                                                println("Failed to update booking ID: ${e.message}")
+                                            }
                                         println("Booking berhasil ditambahkan ke Firestore")
                                         navController.navigate("home") // Navigasi ke halaman Home
                                     }

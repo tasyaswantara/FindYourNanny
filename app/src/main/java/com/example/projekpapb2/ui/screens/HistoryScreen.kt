@@ -4,6 +4,9 @@ import com.example.projekpapb2.R
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
@@ -13,19 +16,50 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.White
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import coil.compose.rememberAsyncImagePainter
+import com.example.projekpapb2.data.model.Booking
+import com.example.projekpapb2.data.model.Nanny
+import com.example.projekpapb2.data.repository.BookingRepository
+import com.example.projekpapb2.data.repository.NannyRepository
 import com.example.projekpapb2.ui.components.BottomNavbar
-import com.example.projekpapb2.ui.theme.Blue600
 import com.example.projekpapb2.ui.theme.Fredoka
+import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 @Composable
-fun HistoryScreen(navController: NavController) {
+fun HistoryScreen(navController: NavController, repository: BookingRepository,nannyrepository:NannyRepository) {
+    var ongoingBookings by remember { mutableStateOf(emptyList<Booking>()) }
+    var completedBookings by remember { mutableStateOf(emptyList<Booking>()) }
+    var nannies by remember { mutableStateOf(emptyList<Nanny>()) }
     var selectedTab by remember { mutableStateOf("Berlangsung") }
+    val currentUser = Firebase.auth.currentUser
+    LaunchedEffect(currentUser) {
+
+        if (currentUser != null) {
+            nannies = nannyrepository.getNannies()
+            val allBookings = repository.getBookings()
+            ongoingBookings = allBookings
+                .filter { booking ->
+                booking.userId == currentUser.uid && booking.status == "berlangsung"
+            }
+            completedBookings = allBookings.filter { booking ->
+                booking.userId == currentUser.uid && booking.status == "selesai"
+            }
+        } else {
+            ongoingBookings = emptyList()
+            completedBookings = emptyList()
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -90,63 +124,98 @@ fun HistoryScreen(navController: NavController) {
 
             // Content Based on Tab
             if (selectedTab == "Berlangsung") {
-                OngoingServices()
+                OngoingServices(ongoingBookings,nannies, navController = navController)
             } else {
-                CompletedServices()
+                CompletedServices(completedBookings,nannies,navController = navController)
             }
         }
     }
 }
 
 @Composable
-fun OngoingServices() {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp)
-    ) {
-        repeat(3) {
+fun OngoingServices(ongoingBookings: List<Booking>, nannies: List<Nanny>, navController: NavController) {
+    val dateFormatter = SimpleDateFormat("dd MMMM", Locale("id", "ID"))
+
+    LazyColumn(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
+        item {
+            if (ongoingBookings.isEmpty()) {
+                Text(
+                    text = "Belum ada riwayat berlangsung",
+                    color = Color.Gray,
+                    modifier = Modifier.fillMaxWidth(),
+                    textAlign = TextAlign.Center
+                )
+            }
+        }
+
+        items(ongoingBookings) { booking ->
+            val nanny = nannies.find { it.id == booking.nannyId }
+            val formattedDate = booking.startTime?.toDate()?.let { dateFormatter.format(it) }
+                ?: "Tanggal tidak tersedia"
             ServiceCard(
-                name = "Rani Maharani",
-                date = "Februari 20, 2024",
+                bookingId = booking.id,
+                name = nanny?.name ?: "Nama tidak ditemukan",
+                date = formattedDate,
                 status = "Layanan sedang berlangsung",
                 statusColor = Color(0xFF4CAF50),
-                showButtons = false, // Tombol Like tidak ditampilkan
-                showCompleteButton = true // Tombol Selesai hanya muncul di tab Berlangsung
+                showButtons = false,
+                showCompleteButton = true,
+                photo = nanny?.photo ?: "",
+                navController = navController,
             )
             Spacer(modifier = Modifier.height(8.dp))
         }
     }
 }
 
+
 @Composable
-fun CompletedServices() {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp)
-    ) {
-        repeat(2) {
+fun CompletedServices(completedBookings: List<Booking>, nannies: List<Nanny>, navController: NavController) {
+    val dateFormatter = SimpleDateFormat("dd MMMM", Locale("id", "ID"))
+
+    LazyColumn(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
+        item {
+            if (completedBookings.isEmpty()) {
+                Text(
+                    text = "Belum ada riwayat selesai",
+                    color = Color.Gray,
+                    modifier = Modifier.fillMaxWidth(),
+                    textAlign = TextAlign.Center
+                )
+            }
+        }
+
+        items(completedBookings) { booking ->
+            val nanny = nannies.find { it.id == booking.nannyId }
+            val formattedDate = booking.startTime?.toDate()?.let { dateFormatter.format(it) }
+                ?: "Tanggal tidak tersedia"
             ServiceCard(
-                name = "Rani Maharani",
-                date = "Februari 20, 2024",
-                status = "Layanan Selesai",
-                statusColor = if (it % 2 == 0) Color(0xFF4CAF50) else Color(0xFFF44336),
-                showButtons = true, // Tombol Like ditampilkan di tab Selesai
-                showCompleteButton = false // Tombol "Selesai" tidak muncul di tab Selesai
+                bookingId = booking.id,
+                name = nanny?.name ?: "Nama tidak ditemukan",
+                date = formattedDate,
+                status = "Layanan selesai",
+                statusColor = Color.Black,
+                showButtons = true,
+                showCompleteButton = false,
+                photo = nanny?.photo ?: "",
+                navController = navController,
             )
             Spacer(modifier = Modifier.height(8.dp))
         }
     }
 }
+
 
 @Composable
 fun ServiceCard(
+    bookingId:String,
+    navController: NavController,
     name: String,
     date: String,
+    photo:String,
     status: String,
     statusColor: Color,
-    showButtons: Boolean, // Tombol Like di sebelah kiri status
+    showButtons: Boolean,
     showCompleteButton: Boolean = false // Tombol Selesai hanya di tab Berlangsung
 ) {
     Box(
@@ -174,9 +243,14 @@ fun ServiceCard(
                         .clip(CircleShape)
                 ) {
                     Image(
-                        painter = painterResource(id = R.drawable.foto_nanny),
-                        contentDescription = "Foto Nanny"
+                        painter = rememberAsyncImagePainter(photo),
+                        contentDescription = "Nanny Image",
+                        modifier = Modifier
+                            .size(80.dp)
+                            .clip(CircleShape),
+                        contentScale = ContentScale.Crop
                     )
+
                 }
 
                 Spacer(modifier = Modifier.width(16.dp))
@@ -224,7 +298,7 @@ fun ServiceCard(
                 // Tombol "Selesai" kecil di sebelah kanan hanya di tab Berlangsung
                 if (showCompleteButton) {
                     Button(
-                        onClick = { /* Belum diarahkan */ },
+                        onClick = {navController.navigate("review/${bookingId}") },
                         modifier = Modifier
                             .height(36.dp)
                             .wrapContentWidth(),
