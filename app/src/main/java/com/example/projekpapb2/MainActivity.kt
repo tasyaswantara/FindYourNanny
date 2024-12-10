@@ -61,9 +61,10 @@ fun FindYourNannyApp(startDestination: String) {
         composable("register") {
             RegisterScreen(navController = navController, authRepository = authRepository)
         }
-        composable("pilih/{nannyId}") {  backStackEntry ->
+        composable("pilih/{nannyId}/{service}") {  backStackEntry ->
             val nannyId = backStackEntry.arguments?.getString("nannyId") ?: ""
-            PilihJadwalScreen(nannyId = nannyId, navController = navController, repository = nannyRepository)
+            val service = backStackEntry.arguments?.getString("service")?: ""
+            PilihJadwalScreen(nannyId = nannyId, navController = navController, repository = nannyRepository,service = service)
         }
 
         composable("onboarding") {
@@ -90,16 +91,19 @@ fun FindYourNannyApp(startDestination: String) {
         composable("babyList") {
             BabyCaretakerScreen(navController = navController, repository = nannyRepository)
         }
-        composable("detail/{nannyId}") { backStackEntry ->
+        composable("detail/{nannyId}/{service}") { backStackEntry ->
             val nannyId = backStackEntry.arguments?.getString("nannyId") ?: ""
+            val service = backStackEntry.arguments?.getString("service")?: ""
             DetailScreen(
                 nannyId = nannyId,
                 navController = navController,
-                repository = nannyRepository
+                repository = nannyRepository,
+                service = service
             )
         }
-        composable("booking/{nannyId}") { backStackEntry ->
-            BookingScreen(navController = navController)
+        composable("booking/{nannyId}/{service}") { backStackEntry ->
+            val service = backStackEntry.arguments?.getString("service")?: ""
+            BookingScreen(navController = navController,service = service)
         }
         composable("profil") {
             ProfileScreen(navController = navController)

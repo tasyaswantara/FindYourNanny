@@ -46,7 +46,10 @@ fun HouseCaretakerScreen(navController: NavController, repository: NannyReposito
     var filteredNannies by remember { mutableStateOf(emptyList<Nanny>()) }
 
     LaunchedEffect(Unit) {
-        nannies = repository.getNannies()
+        val allNannies = repository.getNannies()
+        nannies = allNannies.filter { nanny ->
+            nanny.jenisLayanan.contains("rumah")
+        }
         filteredNannies = nannies
     }
 
@@ -101,7 +104,7 @@ fun HouseCaretakerScreen(navController: NavController, repository: NannyReposito
                     NannyItem(
                         nanny = nanny,
                         onClick = {
-                            navController.navigate(NavRoutes.detailRoute(nanny.id))
+                            navController.navigate(NavRoutes.detailRoute(nanny.id,"rumah"))
                         }
                     )
                 }

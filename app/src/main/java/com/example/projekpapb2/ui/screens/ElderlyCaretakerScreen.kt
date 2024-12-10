@@ -46,7 +46,10 @@ fun ElderlyCaretakerScreen(navController: NavController, repository: NannyReposi
     var filteredNannies by remember { mutableStateOf(emptyList<Nanny>()) }
 
     LaunchedEffect(Unit) {
-        nannies = repository.getNannies()
+        val allNannies = repository.getNannies()
+        nannies = allNannies.filter { nanny ->
+            nanny.jenisLayanan.contains("lansia")
+        }
         filteredNannies = nannies
     }
 
@@ -101,7 +104,7 @@ fun ElderlyCaretakerScreen(navController: NavController, repository: NannyReposi
                     NannyItem(
                         nanny = nanny,
                         onClick = {
-                            navController.navigate(NavRoutes.detailRoute(nanny.id))
+                            navController.navigate(NavRoutes.detailRoute(nanny.id,"lansia"))
                         }
                     )
                 }

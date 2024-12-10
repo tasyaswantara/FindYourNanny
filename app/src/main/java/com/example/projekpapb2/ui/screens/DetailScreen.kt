@@ -65,7 +65,7 @@ import com.example.projekpapb2.ui.theme.Fredoka
 import com.example.projekpapb2.ui.utils.openWhatsApp
 
 @Composable
-fun DetailScreen(nannyId: String, navController: NavController, repository: NannyRepository) {
+fun DetailScreen(nannyId: String,service: String, navController: NavController, repository: NannyRepository) {
     val context = LocalContext.current
     var nanny by remember { mutableStateOf<Nanny?>(null) }
 
@@ -171,7 +171,7 @@ Column( modifier = Modifier
             ) {
                 // Tombol Pesan Sekarang
                 Button(
-                    onClick = { navController.navigate("pilih/${it.id}") },
+                    onClick = { navController.navigate("pilih/${it.id}/${service}") },
                     colors = ButtonDefaults.buttonColors(containerColor = Blue600),
                     shape = RoundedCornerShape(12.dp), // Membuat tombol rounded
                     modifier = Modifier

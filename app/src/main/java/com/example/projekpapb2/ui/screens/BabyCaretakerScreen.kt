@@ -46,7 +46,10 @@ fun BabyCaretakerScreen(navController: NavController, repository: NannyRepositor
     var filteredNannies by remember { mutableStateOf(emptyList<Nanny>()) }
 
     LaunchedEffect(Unit) {
-        nannies = repository.getNannies()
+        val allNannies = repository.getNannies()
+        nannies = allNannies.filter { nanny ->
+            nanny.jenisLayanan.contains("bayi")
+        }
         filteredNannies = nannies
     }
 
@@ -102,7 +105,7 @@ fun BabyCaretakerScreen(navController: NavController, repository: NannyRepositor
                     NannyItem(
                         nanny = nanny,
                         onClick = {
-                            navController.navigate(NavRoutes.detailRoute(nanny.id))
+                            navController.navigate(NavRoutes.detailRoute(nanny.id,"bayi"))
                         }
                     )
                 }

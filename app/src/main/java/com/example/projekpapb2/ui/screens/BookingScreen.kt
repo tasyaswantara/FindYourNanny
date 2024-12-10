@@ -37,7 +37,7 @@ import java.util.Locale
 
 
 @Composable
-fun BookingScreen(navController: NavController) {
+fun BookingScreen(navController: NavController, service: String) {
     val context = LocalContext.current
     var address by remember { mutableStateOf("") }
     var selectedDate by remember { mutableStateOf<Date?>(null) }

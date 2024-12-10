@@ -1,5 +1,6 @@
 package com.example.projekpapb2.ui.screens
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.provider.CalendarContract
@@ -32,11 +33,14 @@ import com.google.firebase.Timestamp
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.type.Date
+import java.time.LocalDate
+import java.time.format.TextStyle
 import java.util.Calendar
+import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PilihJadwalScreen(nannyId: String, navController: NavController, repository: NannyRepository) {
+fun PilihJadwalScreen(nannyId: String, service:String, navController: NavController, repository: NannyRepository) {
     val context = LocalContext.current
     val currentUser = Firebase.auth.currentUser
     var address by remember { mutableStateOf("") }
@@ -133,10 +137,10 @@ fun PilihJadwalScreen(nannyId: String, navController: NavController, repository:
                                 val endMillis =
                                     startMillis + (60 * 60 * 1000) // Durasi default 1 jam
                                 val description =
-                                    "Alamat Rumah: ${address},\nJenis layanan: ${it.jenisLayanan},\nNama nanny: ${it.name}"
+                                    "Alamat Rumah: ${address},\nJenis layanan: ${service},\nNama nanny: ${it.name}"
                                 addEventToCalendar(
                                     context = context,
-                                    title = "Pemesanan Nanny ${it.name} untuk ${it.jenisLayanan}",
+                                    title = "Pemesanan Nanny ${it.name} untuk ${service}",
                                     location = address,
                                     description = description,
                                     startMillis = startMillis,
@@ -203,14 +207,18 @@ fun PilihJadwalScreen(nannyId: String, navController: NavController, repository:
 }
 
 
+@SuppressLint("NewApi")
 @Composable
 fun CalendarComponent(unavailableDates: List<Int>, onDateSelected: (Int) -> Unit) {
     val daysInMonth = (1..31).toList()
     var selectedDate by remember { mutableStateOf<Int?>(null) }
+    val currentDate = LocalDate.now()
+    val currentMonth = currentDate.month
+    val currentMonthName = currentMonth.getDisplayName(TextStyle.FULL, Locale("id", "ID"))
 
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Text(
-            text = "Oktober",
+            text = currentMonthName,
             style = MaterialTheme.typography.titleMedium,
             modifier = Modifier.padding(8.dp),
             fontFamily = Fredoka

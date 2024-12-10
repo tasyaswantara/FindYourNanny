@@ -45,7 +45,10 @@ fun AnimalCaretakerScreen(navController: NavController, repository: NannyReposit
     var filteredNannies by remember { mutableStateOf(emptyList<Nanny>()) }
 
     LaunchedEffect(Unit) {
-        nannies = repository.getNannies()
+        val allNannies = repository.getNannies()
+        nannies = allNannies.filter { nanny ->
+            nanny.jenisLayanan.contains("hewan")
+        }
         filteredNannies = nannies
     }
 
@@ -100,7 +103,7 @@ fun AnimalCaretakerScreen(navController: NavController, repository: NannyReposit
                     NannyItem(
                         nanny = nanny,
                         onClick = {
-                            navController.navigate(NavRoutes.detailRoute(nanny.id))
+                            navController.navigate(NavRoutes.detailRoute(nanny.id,"hewan"))
                         }
                     )
                 }

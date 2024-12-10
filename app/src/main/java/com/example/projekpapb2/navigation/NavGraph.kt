@@ -15,7 +15,7 @@ import com.example.projekpapb2.ui.screens.HouseCaretakerScreen
 object NavRoutes {
     const val NANNY_LIST = "nannyList"
     const val DETAIL = "detail/{nannyId}"
-    fun detailRoute(nannyId: String): String = "detail/$nannyId"
+    fun detailRoute(nannyId: String, service: String): String = "detail/$nannyId/$service"
 }
 
 @Composable
@@ -35,7 +35,8 @@ fun NavGraph(navController: NavHostController) {
             arguments = listOf(navArgument("nannyId") { defaultValue = "" })
         ) { backStackEntry ->
             val nannyId = backStackEntry.arguments?.getString("nannyId").orEmpty()
-            DetailScreen(navController = navController, nannyId = nannyId, repository = repository)
+            val service = backStackEntry.arguments?.getString("service").orEmpty()
+            DetailScreen(navController = navController, nannyId = nannyId, repository = repository, service=service)
         }
 
         composable("elderlyCaretakerList") {
